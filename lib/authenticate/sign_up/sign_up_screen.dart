@@ -12,6 +12,7 @@ import 'package:store_responsive_dashboard/constants/form_error.dart';
 
 import 'package:store_responsive_dashboard/pages/example.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
+import 'package:store_responsive_dashboard/root.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function toggleView;
@@ -225,8 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SidebarXExampleApp(),
+                                                builder: (context) => Root(),
                                               ),
                                               (route) => false,
                                             );

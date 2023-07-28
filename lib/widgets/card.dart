@@ -7,13 +7,15 @@ class CardWidget extends StatelessWidget {
       required this.title,
       required this.metric,
       required this.subtitle,
-      this.press})
+      this.press,
+      required this.icon})
       : super(key: key);
 
   final String subtitle;
   final Widget metric;
   final String title;
   final Function? press;
+  final Icon icon;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class CardWidget extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             // surfaceTintColor: Colors.green,
             // shadowColor: Color.fromARGB(255, 244, 204, 252),
-            elevation: 15,
+            elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(15),
               child: Row(
@@ -48,7 +50,7 @@ class CardWidget extends StatelessWidget {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 5,
+                        height: 6,
                       ),
                       Text(subtitle)
                     ],

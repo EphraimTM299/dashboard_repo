@@ -65,7 +65,7 @@ class CurrentUser extends ChangeNotifier {
 
       retVal = "success";
     } catch (e) {}
-
+    notifyListeners();
     return retVal;
   }
 
@@ -83,6 +83,7 @@ class CurrentUser extends ChangeNotifier {
       }
     } catch (e) {
       retVal = e.toString();
+      AlertDialog();
     }
 
     return retVal;

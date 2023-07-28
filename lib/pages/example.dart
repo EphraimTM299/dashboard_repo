@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
+// ignore: unused_import
 import 'package:store_responsive_dashboard/pages/customers.dart';
 import 'package:store_responsive_dashboard/pages/orders.dart';
 import 'package:store_responsive_dashboard/pages/services.dart';
 import 'package:store_responsive_dashboard/pages/settings.dart';
 import 'package:store_responsive_dashboard/pages/statistics.dart';
 
-class SidebarXExampleApp extends StatelessWidget {
-  SidebarXExampleApp({Key? key}) : super(key: key);
+class MyHomepage extends StatelessWidget {
+  MyHomepage({Key? key}) : super(key: key);
 
   final _controller = SidebarXController(selectedIndex: 0, extended: false);
   final _key = GlobalKey<ScaffoldState>();
@@ -66,7 +67,7 @@ class ExampleSidebarX extends StatelessWidget {
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: canvasColor,
           borderRadius: BorderRadius.circular(20),
@@ -112,9 +113,12 @@ class ExampleSidebarX extends StatelessWidget {
       ),
       footerDivider: divider,
       headerBuilder: (context, extended) {
-        return SizedBox(
-          height: 100,
-          width: 100,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            height: 100,
+            width: 100,
+          ),
         );
       },
       items: [
@@ -126,13 +130,17 @@ class ExampleSidebarX extends StatelessWidget {
           icon: Icons.room_service_outlined,
           label: 'Services',
         ),
-        const SidebarXItem(
+        SidebarXItem(
           icon: Icons.info_outline_rounded,
           label: 'Statistics',
         ),
-        const SidebarXItem(
+        SidebarXItem(
           icon: Icons.settings,
           label: 'Settings',
+        ),
+        SidebarXItem(
+          icon: Icons.logout,
+          label: 'Logout',
         ),
       ],
     );

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:store_responsive_dashboard/authenticate/authenticate.dart';
 
 import 'package:store_responsive_dashboard/pages/example.dart';
+import 'package:store_responsive_dashboard/pages/orders.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 
 enum AuthStatus { notLoggedIn, loggedIn }
@@ -55,7 +56,7 @@ class _RootState extends State<Root> {
         retVal = Authenticate();
         break;
       case AuthStatus.loggedIn:
-        retVal = SidebarXExampleApp();
+        retVal = MyHomepage();
         break;
       default:
     }

@@ -32,12 +32,6 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  // @override
-  // void didChangeDependencies() {
-  //   getOrders();
-  //   super.didChangeDependencies();
-  // }
-
   FirebaseFirestore db = FirebaseFirestore.instance;
   var selectedStatus;
   @override
@@ -67,6 +61,7 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   List<Orders> _orders = [];
+
   //setting the expansion function for the navigation rail
   bool isExpanded = false;
   final jobRoleCtrl = TextEditingController();
@@ -75,12 +70,12 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(60.0),
+      backgroundColor: Colors.grey[50],
+      body: Padding(
+        padding: const EdgeInsets.only(left: 8.0, top: 8),
+        child: Row(
+          children: [
+            Expanded(
               child: SingleChildScrollView(
                 padding: EdgeInsets.all(0),
                 child: Column(
@@ -93,11 +88,36 @@ class _OrdersPageState extends State<OrdersPage> {
                       padding: EdgeInsets.all(15.0),
                       child: Row(
                         children: [
-                          Text(
-                            "${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.laundromatName}",
-                            style: TextStyle(
-                                fontSize: 34, fontWeight: FontWeight.bold),
-                          )
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.laundromatName}",
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w300),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(Icons.account_circle),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                      "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} "),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Spacer()
                         ],
                       ),
                     ),
@@ -114,17 +134,37 @@ class _OrdersPageState extends State<OrdersPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CardWidget(
-                              title: "Total Orders",
-                              metric: Text("${_orders.length}"),
-                              subtitle: "Lifetime Orders"),
+                            title: "Revenue",
+                            metric: Text("${_orders.length}",
+                                style: TextStyle(fontSize: 20)),
+                            subtitle: "Lifetime Orders",
+                            icon: Icon(Icons.monetization_on_outlined),
+                          ),
                           CardWidget(
-                              title: "Orders",
-                              metric: Text("${_orders.length}"),
-                              subtitle: "Ordes today"),
+                            title: "Orders",
+                            metric: Text("${_orders.length}",
+                                style: TextStyle(fontSize: 20)),
+                            subtitle: "Ordes today",
+                            icon: Icon(Icons.monetization_on_outlined),
+                          ),
                           CardWidget(
-                              title: " Order Amount",
-                              metric: Text("${_orders.length}"),
-                              subtitle: "Average to date"),
+                            title: "Gross Revenue",
+                            metric: Text(
+                              "${_orders.length}",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            subtitle: "Monthly Revenue",
+                            icon: Icon(Icons.monetization_on_outlined),
+                          ),
+                          CardWidget(
+                            title: "Order Amount",
+                            metric: Text(
+                              "R1505.00",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            subtitle: "Average to date",
+                            icon: Icon(Icons.monetization_on_outlined),
+                          ),
                         ],
                       ),
                     ),
@@ -139,13 +179,26 @@ class _OrdersPageState extends State<OrdersPage> {
                         Column(
                           children: [
                             CardWidget(
-                                title: "Revenue",
-                                metric: Text("2500"),
-                                subtitle: "Revenue this week"),
+                              title: "Repeat Orders",
+                              metric:
+                                  Text("2500", style: TextStyle(fontSize: 20)),
+                              subtitle: "Revenue this week",
+                              icon: Icon(Icons.monetization_on_outlined),
+                            ),
                             CardWidget(
-                                title: "Revenue",
-                                metric: Text("2500"),
-                                subtitle: "Revenue this week"),
+                              title: "Online Orders",
+                              metric:
+                                  Text("2500", style: TextStyle(fontSize: 20)),
+                              subtitle: "Revenue this week",
+                              icon: Icon(Icons.monetization_on_outlined),
+                            ),
+                            CardWidget(
+                              title: "Onsite Orders",
+                              metric:
+                                  Text("2500", style: TextStyle(fontSize: 20)),
+                              subtitle: "Revenue this week",
+                              icon: Icon(Icons.monetization_on_outlined),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -302,9 +355,10 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
+
       //let's add the floating action button
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

@@ -8,6 +8,7 @@ import 'package:store_responsive_dashboard/constants/form_error.dart';
 import 'package:store_responsive_dashboard/pages/example.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
+import 'package:store_responsive_dashboard/root.dart';
 
 import '../../../constants/size_config.dart';
 
@@ -131,6 +132,7 @@ class _SignInPageState extends State<SignInPage> {
                                 SharedPreferences pref =
                                     await SharedPreferences.getInstance();
                                 pref.setString("email", email);
+                                pref.setString("password", password);
 
                                 KeyboardUtil.hideKeyboard(context);
 
@@ -142,8 +144,7 @@ class _SignInPageState extends State<SignInPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          SidebarXExampleApp(),
+                                      builder: (context) => Root(),
                                     ),
                                   );
                                 } else {
