@@ -9,4 +9,6 @@ class OrdersData extends ChangeNotifier {
   void calculateRevenue() {
     revenue = numOfOrders! * cost!;
   }
+
+  notifyListeners();
 }

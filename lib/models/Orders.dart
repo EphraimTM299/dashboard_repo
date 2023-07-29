@@ -10,6 +10,7 @@ class Orders {
   String? status;
   double? cost;
   String? orderId;
+  String? orderNum;
 
   Orders();
 
@@ -21,6 +22,7 @@ class Orders {
         status = snapshot.data()['orderStatus'],
         cost = snapshot.data()["orderAmount"],
         orderId = snapshot.data()['orderId'],
+        orderNum = snapshot.data()['orderNumber'],
         userName = snapshot.data()['userName'];
 
   Map<String, dynamic> toMap() {
@@ -33,17 +35,5 @@ class Orders {
     };
   }
 
-  // factory Orders.fromMap(Map<String, dynamic> map) {
-  //   return Orders(
-  //       map['address'] as String,
-  //       map['laundromat'] as String,
-  //       map['userName'] as String,
-  //       map['pickup'] as DateTime,
-  //       map['delivery'] as DateTime);
-  // }
-
   String toJson() => json.encode(toMap());
-
-  // factory Orders.fromJson(String source) =>
-  //     Orders.fromMap(json.decode(source) as Map<String, dynamic>);
 }
