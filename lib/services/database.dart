@@ -51,19 +51,4 @@ class MyDatabase {
   }
 }
 
-// class OrderService {
-//   final CollectionReference laundromatCollection =
-//       FirebaseFirestore.instance.collection("orders");
 
-//   Future<List<Orders>> get_orders() async {
-//     List<Orders> orders = await laundromatCollection.get().then((documents) {
-//       var data = documents.docs;
-
-//       return data
-//           .map((e) => Orders.fromMap(e.data() as Map<String, dynamic>))
-//           .toList();
-//     });
-
-//     return orders;
-//   }
-// }

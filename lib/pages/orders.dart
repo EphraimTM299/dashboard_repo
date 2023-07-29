@@ -90,35 +90,21 @@ class _OrdersPageState extends State<OrdersPage> {
                       padding: EdgeInsets.all(15.0),
                       child: Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
+                          Text(
                                     "${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.laundromatName}",
                                     style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.w300),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(Icons.account_circle),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                      "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} "),
-                                ],
-                              ),
-                            ],
+                                  ),SizedBox(width: 30,),
+
+                          Container(width: MediaQuery.of(context).size.width * 0.2,child: CupertinoSearchTextField()),
+                          Spacer(),
+                          Icon(Icons.account_circle),
+                          SizedBox(
+                            width: 5,
                           ),
+                          Text(
+                              "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} "),
                           Spacer()
                         ],
                       ),

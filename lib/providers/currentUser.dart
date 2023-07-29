@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:store_responsive_dashboard/models/User.dart';
 import 'package:store_responsive_dashboard/services/database.dart';
 
@@ -16,46 +15,22 @@ class CurrentUser extends ChangeNotifier {
   Future<String> onStartUp() async {
     String retVal = "error";
 
-    // try {
+    
     User _firebaseUser = await _auth.currentUser!;
     final uid = _firebaseUser.uid;
-    print("The uid $uid");
+    
     final DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
-    print("object");
+ 
     _currentUser = MyUser.fromMap(userDoc.data() as Map<String, dynamic>);
-    print("####################");
+    
 
     retVal = "success";
-    // } catch (e) {
-    //   print(e);
-    // }
+   
     notifyListeners();
     return retVal;
   }
-
-// Store user card in firebase
-  Future<String> storeUserCard(
-      String number, String expiry, String cvv, String name) async {
-    String retVal = "error";
-
-    try {
-      User _firebaseUser = await _auth.currentUser!;
-
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(_firebaseUser.uid)
-          .collection("cards")
-          .add({"name": name, "number": number, "expiry": expiry, "cvv": cvv});
-
-      retVal = "success";
-    } catch (e) {
-      print(e);
-    }
-    notifyListeners();
-    return retVal;
-  }
-
+  
   Future<String> signOut() async {
     String retVal = "error";
 
