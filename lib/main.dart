@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:store_responsive_dashboard/constants/theme.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
+import 'package:store_responsive_dashboard/providers/ordersData.dart';
 import 'package:store_responsive_dashboard/root.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,9 +30,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CurrentUser()),
+        ChangeNotifierProvider(create: (context) => OrdersData()),
       ],
       child: GetMaterialApp(
-        title: 'Store Dashboard',
+        title: 'Laundry Admin Dashboard',
         theme: theme(),
         home: Root(),
         debugShowCheckedModeBanner: false,

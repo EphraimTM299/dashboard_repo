@@ -41,6 +41,7 @@ class MyDatabase {
         "LaundromatName": user?.laundromatName,
         "AccountCreated": Timestamp.now(),
         "status": "Inactive",
+        "new":"new"
       });
       retVal = "success";
     } catch (e) {

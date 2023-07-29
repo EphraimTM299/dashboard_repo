@@ -9,6 +9,7 @@ import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "package:store_responsive_dashboard/models/Orders.dart";
 import "package:store_responsive_dashboard/providers/currentUser.dart";
+import "package:store_responsive_dashboard/providers/ordersData.dart";
 import "package:store_responsive_dashboard/widgets/card.dart";
 import "package:store_responsive_dashboard/widgets/chart.dart";
 import "package:store_responsive_dashboard/widgets/pie_chart.dart";
@@ -121,7 +122,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         children: [
                           CardWidget(
                             title: "Revenue",
-                            metric: Text("${_orderList.length}",
+                            metric: Text("R${Provider.of<OrdersData>(context, listen:false).revenue}",
                                 style: TextStyle(fontSize: 20)),
                             subtitle: "Lifetime Orders",
                             icon: Icon(Icons.monetization_on_outlined),

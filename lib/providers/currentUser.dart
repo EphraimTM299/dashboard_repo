@@ -64,6 +64,21 @@ class CurrentUser extends ChangeNotifier {
     return retVal;
   }
 
+  Future<String> updateLaundromatDetails() async{
+    String retVal = "error";
+  try {
+        
+        
+
+        retVal = "success";
+      } catch (e) {}
+      notifyListeners();
+      return retVal;
+    
+  }
+
+
+
   Future<String> signUpWithEmailAndPassword(
       String role,
       String email,

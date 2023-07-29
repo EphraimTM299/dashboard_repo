@@ -1,31 +1,20 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:store_responsive_dashboard/authenticate/sign_up/laundry_details.dart';
 import 'package:store_responsive_dashboard/components/constants.dart';
 import 'package:store_responsive_dashboard/components/keyboard.dart';
-import 'package:store_responsive_dashboard/constants/custom_surfix_icon.dart';
 import 'package:store_responsive_dashboard/constants/default_button.dart';
 import 'package:store_responsive_dashboard/constants/form_error.dart';
-
-import 'package:store_responsive_dashboard/pages/example.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/root.dart';
 
-class SignUpScreen extends StatefulWidget {
-  final Function toggleView;
-  static String routeName = "/sign_up";
-
-  const SignUpScreen({super.key, required this.toggleView});
+class LaundryDetails extends StatefulWidget {
+  const LaundryDetails({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<LaundryDetails> createState() => _LaundryDetailsState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _LaundryDetailsState extends State<LaundryDetails> {
   final formKey = GlobalKey<FormState>();
   final List<String> roleItems = ['Staff', 'Manager', 'Owner'];
 
@@ -107,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
 
                         const Text(
-                          "Lets Set up your laundromat",
+                          "Step 2",
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 15),
@@ -134,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       // Add more decoration..
                                     ),
                                     hint: const Text(
-                                      'Select Your Role',
+                                      'How many locations',
                                       // style: TextStyle(fontSize: 14),
                                     ),
                                     items: roleItems
@@ -150,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         .toList(),
                                     validator: (value) {
                                       if (value == null) {
-                                        return 'Please Select your Role';
+                                        return 'Please select number of locations';
                                       }
                                       return null;
                                     },
@@ -181,19 +170,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     ),
                                   ),
                                   const SizedBox(height: 15),
-                                  buildFirstNameFormField(),
+                                  buildBusinessPhoneFormField(),
                                   const SizedBox(height: 15),
-                                  buildPhoneNumberFormField(),
+                                  buildCityFormField(),
                                   const SizedBox(height: 15),
-                                  buildEmailFormField(),
+                                  buildServicesOfferedField(),
                                   const SizedBox(height: 15),
-                                  buildLaundryNameFormField(),
+                                  buildTurnAroundFormField(),
                                   const SizedBox(height: 15),
-                                  buildPasswordFormField(),
-                                  const SizedBox(height: 15),
-                                  buildConfirmPasswordFormField(),
                                   FormError(errors: errors),
-                                  const SizedBox(height: 15),
+                                  const SizedBox(height: 10),
                                   DefaultButton(
                                     text: "Register",
                                     press: () async {
@@ -202,12 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           loading = true;
                                         });
 
-                                        // await UserSimplePreferences
-                                        //     .setUserEmail(email);
-                                        // await UserSimplePreferences.setUserName(
-                                        //     userName);
-                                        // await UserSimplePreferences
-                                        //     .setUserPhone(phoneNumber);
+                                       
 
                                         KeyboardUtil.hideKeyboard(context);
 
@@ -227,7 +208,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             Navigator.pushAndRemoveUntil(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => LaundryDetails(),
+                                                builder: (context) => Root(),
                                               ),
                                               (route) => false,
                                             );
@@ -245,42 +226,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ],
                         ),
-
-                        const SizedBox(
-                          height: 15,
-                        ),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Already a user? ",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                widget.toggleView();
-                              },
-                              child: const Text(
-                                "Sign In",
-                                style: TextStyle(
-                                    fontSize: 20, color: kPrimaryColor),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 15),
-
-                        const SizedBox(height: 10),
-                        Text(
-                          'By continuing your confirm that you agree \nwith our Terms and Conditions',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        )
                       ],
                     ),
                   ),
@@ -322,7 +267,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  TextFormField buildEmailFormField() {
+  TextFormField buildServicesOfferedField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onChanged: (value) {
@@ -348,8 +293,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Email",
-        hintText: "Enter your email",
+        labelText: "Services Offered",
+        hintText: "How many services do you offer",
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -358,7 +303,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  TextFormField buildFirstNameFormField() {
+  TextFormField buildCityFormField() {
     return TextFormField(
       onChanged: (value) {
         setState(() {
@@ -378,8 +323,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Full Name",
-        hintText: "Enter Full Name",
+        labelText: "City Located",
+        hintText: "Enter the City",
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -388,7 +333,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  TextFormField buildPhoneNumberFormField() {
+  TextFormField buildBusinessPhoneFormField() {
     return TextFormField(
       keyboardType: TextInputType.phone,
       onChanged: (value) {
@@ -408,8 +353,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Phone Number",
-        hintText: "Enter your phone number",
+        labelText: "Business Phone",
+        hintText: "Enter your Business Phone",
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -418,7 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  TextFormField buildConfirmPasswordFormField() {
+  TextFormField buildTurnAroundFormField() {
     return TextFormField(
       obscureText: true,
       onChanged: (value) {
@@ -440,8 +385,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: "Confirm Password",
-        hintText: "Re-enter your password",
+        labelText: "TurnAround Time",
+        hintText: "What is your Turnaround time?",
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
