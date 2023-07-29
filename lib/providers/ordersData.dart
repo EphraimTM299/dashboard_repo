@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:store_responsive_dashboard/models/Orders.dart';
 
 class OrdersData extends ChangeNotifier {
   double cost = 0.0;
   int? numOfOrders;
 
-  double revenue = 200;
-
-  
+  double revenue = 0;
 
 
 
 
 
-  void calculateRevenue(  int numberofOrders) {
-     revenue = numberofOrders * cost ;
+
+
+  double calculateRevenue(List<Orders> orders) {
+    print("Orders $orders");
+     revenue = orders.fold(0,(value, element){
+      print(value);
+      return value +((element).cost ?? 0);}); 
+     return revenue;
   }
 
   notifyListeners();

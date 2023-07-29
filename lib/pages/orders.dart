@@ -122,7 +122,7 @@ class _OrdersPageState extends State<OrdersPage> {
                         children: [
                           CardWidget(
                             title: "Revenue",
-                            metric: Text("R${Provider.of<OrdersData>(context, listen:false).revenue}",
+                            metric: Text("R${Provider.of<OrdersData>(context, listen:false).calculateRevenue(_orderList).toStringAsFixed(2)}",
                                 style: TextStyle(fontSize: 20)),
                             subtitle: "Lifetime Orders",
                             icon: Icon(Icons.monetization_on_outlined),
