@@ -19,14 +19,19 @@ class CardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+       double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;   
     // ignore: sized_box_for_whitespace
     return InkWell(
       onTap: press as void Function()?,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          height: 150,
-          width: 250,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24)
+          ),
+          height: height* 0.20,
+          width: width*.212,
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),

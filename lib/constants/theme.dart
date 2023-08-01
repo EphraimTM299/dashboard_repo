@@ -5,8 +5,8 @@ import 'package:store_responsive_dashboard/components/constants.dart';
 
 ThemeData theme() {
   return ThemeData(
-    scaffoldBackgroundColor: Colors.white,
-    fontFamily: "Muli",
+    scaffoldBackgroundColor: Colors.white30,
+    fontFamily: "Roboto",
     appBarTheme: appBarTheme(),
     textTheme: textTheme(),
     inputDecorationTheme: inputDecorationTheme(),

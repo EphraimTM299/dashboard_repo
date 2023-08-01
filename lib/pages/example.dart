@@ -16,6 +16,7 @@ class MyHomepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Builder(
         builder: (context) {
           final isSmallScreen = MediaQuery.of(context).size.width < 600;

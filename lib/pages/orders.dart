@@ -6,10 +6,12 @@ import "package:animated_custom_dropdown/custom_dropdown.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
 import "package:intl/intl.dart";
 import "package:percent_indicator/percent_indicator.dart";
 import "package:provider/provider.dart";
 import "package:store_responsive_dashboard/components/constants.dart";
+import "package:store_responsive_dashboard/constants/size_config.dart";
 import "package:store_responsive_dashboard/models/Orders.dart";
 import "package:store_responsive_dashboard/providers/currentUser.dart";
 import "package:store_responsive_dashboard/providers/ordersData.dart";
@@ -35,6 +37,7 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
+  
   DateTime now = DateTime.now();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -76,10 +79,12 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;   
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.grey.shade100,
       body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 35),
+        padding: const EdgeInsets.only(left: 8.0, top: 0, bottom: 35),
         child: Row(
           children: [
             Expanded(
@@ -107,28 +112,7 @@ class _OrdersPageState extends State<OrdersPage> {
                               width: MediaQuery.of(context).size.width * .30,
                               child: CupertinoSearchTextField()),
                           Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                right: MediaQuery.of(context).size.width * .05),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.account_circle),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                        "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} "),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text("${DateFormat.MMMMEEEEd().format(now)}")
-                              ],
-                            ),
-                          ),
+                         
                         ],
                       ),
                     ),
@@ -145,7 +129,7 @@ class _OrdersPageState extends State<OrdersPage> {
                           CardWidget(
                             title: "Revenue",
                             metric: Text(
-                                "R${Provider.of<OrdersData>(context, listen: false).calculateRevenue(_orderList).toStringAsFixed(2)}",
+                                "R ${Provider.of<OrdersData>(context, listen: false).calculateRevenue(_orderList).toStringAsFixed(2)}",
                                 style: TextStyle(fontSize: 20)),
                             subtitle: "Monthly Revenue",
                             icon: Icon(Icons.monetization_on_outlined),
@@ -166,24 +150,24 @@ class _OrdersPageState extends State<OrdersPage> {
                             subtitle: "Monthly Revenue",
                             icon: Icon(Icons.monetization_on_outlined),
                           ),
-                          CardWidget(
-                            title: "Customers",
-                            metric: Text(
-                              "${_orderList.length}",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            subtitle: "Monthly Revenue",
-                            icon: Icon(Icons.monetization_on_outlined),
-                          ),
-                          CardWidget(
-                            title: "Customers",
-                            metric: Text(
-                              "${_orderList.length}",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            subtitle: "Monthly Revenue",
-                            icon: Icon(Icons.monetization_on_outlined),
-                          ),
+                          // CardWidget(
+                          //   title: "Customers",
+                          //   metric: Text(
+                          //     "${_orderList.length}",
+                          //     style: TextStyle(fontSize: 20),
+                          //   ),
+                          //   subtitle: "Monthly Revenue",
+                          //   icon: Icon(Icons.monetization_on_outlined),
+                          // ),
+                          // CardWidget(
+                          //   title: "Customers",
+                          //   metric: Text(
+                          //     "${_orderList.length}",
+                          //     style: TextStyle(fontSize: 20),
+                          //   ),
+                          //   subtitle: "Monthly Revenue",
+                          //   icon: Icon(Icons.monetization_on_outlined),
+                          // ),
                         ],
                       ),
                     ),
@@ -191,61 +175,73 @@ class _OrdersPageState extends State<OrdersPage> {
                       height: 40.0,
                     ),
 
-                    Row(
-                      children: [
-                        Column(
-                          children: [
-                            Text("Weekly Revenue Breakdown"),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Card(
-                              child: Container(
-                                  height: 300,
-                                  width:
-                                      MediaQuery.of(context).size.width * .28,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: MyChart(isShowingMainData: true),
-                                  )),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            Text("Revenue Breakdown by Service"),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Card(
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text("Weekly Revenue Breakdown"),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                                 child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * .20,
                                     height: 300,
-                                    child: PieChartSample2())),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Column(
-                          children: [
-                            Text("Revenue Breakdown by Service"),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Card(
-                                child: Container(
                                     width:
-                                        MediaQuery.of(context).size.width * .20,
-                                    height: 300,
-                                    child: PieChartSample2())),
-                          ],
-                        ),
-                      ],
+                                        MediaQuery.of(context).size.width * .40,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: MyChart(isShowingMainData: true),
+                                    )),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            children: [
+                              Text("Revenue Breakdown by Service"),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                    child: Container(
+                                        width:
+                                            width * .25,
+                                        height: 300,
+                                        child: PieChartSample2())),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            children: [
+                              Text("Revenue Breakdown by Service"),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                    child: Container(
+                                        width:
+                                            width * .25,
+                                        height: 300,
+                                        child: PieChartSample2())),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(
                       height: 30.0,
@@ -291,21 +287,13 @@ class _OrdersPageState extends State<OrdersPage> {
                             child: DataTable(
                                 sortAscending: false,
                                 headingTextStyle: TextStyle(
-                                    color: Colors.black87, fontSize: 18),
-                                dataTextStyle: TextStyle(color: Colors.black87),
+                                    color: Colors.black87, fontSize: getProportionateScreenWidth(15)),
+                                dataTextStyle: TextStyle(color: Colors.black87, fontSize: getProportionateScreenWidth(15)),
                                 columns: [
                                   const DataColumn(
-                                      label: Row(
-                                    children: [
-                                      Text("Order No."),
-                                    ],
-                                  )),
+                                      label: Text("OrderNo.")),
                                   const DataColumn(
-                                      label: Row(
-                                    children: [
-                                      Text("Customer"),
-                                    ],
-                                  )),
+                                      label: Text("Customer")),
                                   const DataColumn(label: Text("Order Date")),
                                   const DataColumn(label: Text("Due Date")),
                                   const DataColumn(label: Text("Amount")),
@@ -367,166 +355,222 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 15.0),
-              child: Column(
-                children: [
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Upcoming orders",
-                          style: headingStyle,
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: ((BuildContext context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    title: Text('Order: 01228'),
-                                    content: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      width: 450,
-                                      height: 200,
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 18.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    "Items",
-                                                    style: subheadingStyle,
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    "Service",
-                                                    style: subheadingStyle,
-                                                  ),
-                                                  Spacer(),
-                                                  Text(
-                                                    "Qty",
-                                                    style: subheadingStyle,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 15,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 18.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Text("Small Bag"),
-                                                  Spacer(),
-                                                  Text("Service: Wash"),
-                                                  Spacer(),
-                                                  Text("2"),
-                                                  SizedBox(
-                                                    width: 3,
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(
-                                                  left: 45.0,
-                                                  right: 45,
-                                                  top: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.10),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            30)),
-                                                height: 25,
-                                                width: double.infinity,
-                                                child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text(
-                                                        "Start Processing")),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }));
-                          },
-                          child: Card(
-                            margin: EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Row(
+          
+            Container(
+              //  decoration: BoxDecoration(color: Colors.white, ),
+                height: height,
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 15.0, top: 15),
+                  child: Column(
+                    // mainAxisAlignment: MainAxisAlignment.start,
+                    
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                       Padding(
+                                padding: EdgeInsets.only(
+                                    right: MediaQuery.of(context).size.width * .05),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Column(
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Spacer(),
-                                        CircularPercentIndicator(radius: 25),
-                                        Spacer()
+                                        Icon(Icons.account_circle),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                            "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} ", style: headingStyle,),
                                       ],
                                     ),
                                     SizedBox(
-                                      width: 5,
+                                      height: 5,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Text("Order Date: ${DateTime.now()}"),
-                                        Spacer(),
-                                        Text("Order Status: Placed"),
-                                        Spacer(),
-                                        Text("Order Number: 01228"),
-                                        Spacer(),
-                                        Text("Due Date: ${DateTime.now()}"),
-                                        Spacer(),
-                                      ],
-                                    ),
+                                    // Text("${DateFormat.MMMMEEEEd().format(now)}")
                                   ],
                                 ),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.amber.shade300,
-                              ),
-                              height: MediaQuery.of(context).size.width * .08,
-                              width: MediaQuery.of(context).size.width * .20,
+                              SizedBox(height: 20,),
+                      Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Upcoming orders( )",
+                              style: headingStyle,
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                            SizedBox(
+                              height: 15,
+                            ),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: ((BuildContext context) {
+                                      return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        title: Row(
+                                          children: [
+              
+                                            Text('Order: 01228'),
+                                            Spacer(),
+                                            InkWell(
+                                              onTap:(){Navigator.pop(context);}, child:Icon(Icons.cancel_outlined))
+                                          ],
+                                        ),
+                                        content: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
+                                          width: 450,
+                                          height: 200,
+                                          child: SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      right: 18.0),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        "Items",
+                                                        style: subheadingStyle,
+                                                      ),
+                                                      Spacer(),
+                                                      Text(
+                                                        "Service",
+                                                        style: subheadingStyle,
+                                                      ),
+                                                      Spacer(),
+                                                      Text(
+                                                        "Qty",
+                                                        style: subheadingStyle,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      right: 18.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Text("Small Bag"),
+                                                      Spacer(),
+                                                      Text("Service: Wash"),
+                                                      Spacer(),
+                                                      Text("2"),
+                                                      SizedBox(
+                                                        width: 3,
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: 45.0,
+                                                      right: 45,
+                                                      top: MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.10),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF685BFF ),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                30)),
+                                                    height: 25,
+                                                    width: double.infinity,
+                                                    child: ElevatedButton(
+                                                        onPressed: () {
+                                                          Navigator.pop(context);
+                                                        },
+                                                        child: Text(
+                                                            "Start Processing")),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }));
+                              },
+                              child: Card(
+                                margin: EdgeInsets.all(0),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Spacer(),
+                                            CircularPercentIndicator(
+                                              circularStrokeCap: CircularStrokeCap.round,
+                                              lineWidth: 10,radius: 30, percent: 0.25,progressColor: Colors.white ,backgroundColor: Colors.white38,),
+                                            Spacer()
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        VerticalDivider(
+                                          width: 3,
+                                          color: Colors.white,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Text(style: TextStyle(color: Colors.white),"Order Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                                              Spacer(),
+                                              Text(style: TextStyle(color: Colors.white),"Order Status: Placed"),
+                                              Spacer(),
+                                              Text(style: TextStyle(color: Colors.white),"Order Number: 01228"),
+                                              Spacer(),
+                                              Text(style: TextStyle(color: Colors.white),"Due Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color:Color(0xFF685BFF ),
+                                    // color: Colors.amber.shade300,
+                                  ),
+                                  height: MediaQuery.of(context).size.width * .08,
+                                  width: width* .22,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             )
           ],
