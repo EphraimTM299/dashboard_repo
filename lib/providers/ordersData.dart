@@ -7,18 +7,11 @@ class OrdersData extends ChangeNotifier {
 
   double revenue = 0;
 
-
-
-
-
-
-
   double calculateRevenue(List<Orders> orders) {
-    print("Orders $orders");
-     revenue = orders.fold(0,(value, element){
-      print(value);
-      return value +((element).cost ?? 0);}); 
-     return revenue;
+    revenue = orders.fold(0, (value, element) {
+      return value + ((element).cost ?? 0);
+    });
+    return revenue;
   }
 
   notifyListeners();

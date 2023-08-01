@@ -25,13 +25,11 @@ class CardWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
-          height: 100,
-          width: 300,
+          height: 150,
+          width: 250,
           child: Card(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-            // surfaceTintColor: Colors.green,
-            // shadowColor: Color.fromARGB(255, 244, 204, 252),
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(15),
@@ -50,7 +48,7 @@ class CardWidget extends StatelessWidget {
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        height: 6,
+                        height: 10,
                       ),
                       Text(subtitle)
                     ],

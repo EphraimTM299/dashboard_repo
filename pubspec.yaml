@@ -43,6 +43,8 @@ dependencies:
   syncfusion_flutter_datagrid: ^22.1.39
   animated_custom_dropdown: ^1.5.0
   dropdown_button2: ^2.3.7
+  intl: ^0.18.1
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
