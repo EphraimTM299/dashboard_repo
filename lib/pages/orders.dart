@@ -37,7 +37,6 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-  
   DateTime now = DateTime.now();
 
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -80,7 +79,7 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;   
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Padding(
@@ -112,7 +111,6 @@ class _OrdersPageState extends State<OrdersPage> {
                               width: MediaQuery.of(context).size.width * .30,
                               child: CupertinoSearchTextField()),
                           Spacer(),
-                         
                         ],
                       ),
                     ),
@@ -186,7 +184,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                 height: 5,
                               ),
                               Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(24)),
                                 child: Container(
                                     height: 300,
                                     width:
@@ -210,10 +209,11 @@ class _OrdersPageState extends State<OrdersPage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
                                     child: Container(
-                                        width:
-                                            width * .25,
+                                        width: width * .25,
                                         height: 300,
                                         child: PieChartSample2())),
                               ),
@@ -231,10 +231,11 @@ class _OrdersPageState extends State<OrdersPage> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Card(
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(24)),
                                     child: Container(
-                                        width:
-                                            width * .25,
+                                        width: width * .25,
                                         height: 300,
                                         child: PieChartSample2())),
                               ),
@@ -287,13 +288,14 @@ class _OrdersPageState extends State<OrdersPage> {
                             child: DataTable(
                                 sortAscending: false,
                                 headingTextStyle: TextStyle(
-                                    color: Colors.black87, fontSize: getProportionateScreenWidth(15)),
-                                dataTextStyle: TextStyle(color: Colors.black87, fontSize: getProportionateScreenWidth(15)),
+                                    color: Colors.black87,
+                                    fontSize: getProportionateScreenWidth(15)),
+                                dataTextStyle: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: getProportionateScreenWidth(15)),
                                 columns: [
-                                  const DataColumn(
-                                      label: Text("OrderNo.")),
-                                  const DataColumn(
-                                      label: Text("Customer")),
+                                  const DataColumn(label: Text("OrderNo.")),
+                                  const DataColumn(label: Text("Customer")),
                                   const DataColumn(label: Text("Order Date")),
                                   const DataColumn(label: Text("Due Date")),
                                   const DataColumn(label: Text("Amount")),
@@ -310,8 +312,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                         "${_orderList[index].fomartDate(_orderList[index].pickup)}")),
                                     DataCell(Text(
                                         "${_orderList[index].fomartDeliverDate(_orderList[index].delivery)}")),
-                                    DataCell(
-                                        Text("R ${_orderList[index].cost}")),
+                                    DataCell(Text(
+                                        "R ${_orderList[index].cost?.toStringAsFixed(2)}")),
                                     DataCell(Builder(builder: (context) {
                                       int idx = _items.indexOf(
                                           _orderList[index].status ?? '');
@@ -355,45 +357,49 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
               ),
             ),
-          
             Container(
               //  decoration: BoxDecoration(color: Colors.white, ),
-                height: height,
+              height: height,
               child: Card(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 15.0, top: 15),
+                  padding:
+                      const EdgeInsets.only(left: 10, right: 15.0, top: 15),
                   child: Column(
                     // mainAxisAlignment: MainAxisAlignment.start,
-                    
+
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Padding(
-                                padding: EdgeInsets.only(
-                                    right: MediaQuery.of(context).size.width * .05),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.account_circle),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                            "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} ", style: headingStyle,),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    // Text("${DateFormat.MMMMEEEEd().format(now)}")
-                                  ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                            right: MediaQuery.of(context).size.width * .05),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.account_circle),
+                                SizedBox(
+                                  width: 5,
                                 ),
-                              ),
-                              SizedBox(height: 20,),
+                                Text(
+                                  "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} ",
+                                  style: headingStyle,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            // Text("${DateFormat.MMMMEEEEd().format(now)}")
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,11 +423,14 @@ class _OrdersPageState extends State<OrdersPage> {
                                                 BorderRadius.circular(20)),
                                         title: Row(
                                           children: [
-              
                                             Text('Order: 01228'),
                                             Spacer(),
                                             InkWell(
-                                              onTap:(){Navigator.pop(context);}, child:Icon(Icons.cancel_outlined))
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child:
+                                                    Icon(Icons.cancel_outlined))
                                           ],
                                         ),
                                         content: Container(
@@ -436,8 +445,9 @@ class _OrdersPageState extends State<OrdersPage> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 18.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 18.0),
                                                   child: Row(
                                                     children: [
                                                       Text(
@@ -461,8 +471,9 @@ class _OrdersPageState extends State<OrdersPage> {
                                                   height: 15,
                                                 ),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      right: 18.0),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 18.0),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment.start,
@@ -482,21 +493,24 @@ class _OrdersPageState extends State<OrdersPage> {
                                                   padding: EdgeInsets.only(
                                                       left: 45.0,
                                                       right: 45,
-                                                      top: MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.10),
+                                                      top:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.10),
                                                   child: Container(
                                                     decoration: BoxDecoration(
-                                                      color: Color(0xFF685BFF ),
+                                                        color:
+                                                            Color(0xFF685BFF),
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                30)),
+                                                            BorderRadius
+                                                                .circular(30)),
                                                     height: 25,
                                                     width: double.infinity,
                                                     child: ElevatedButton(
                                                         onPressed: () {
-                                                          Navigator.pop(context);
+                                                          Navigator.pop(
+                                                              context);
                                                         },
                                                         child: Text(
                                                             "Start Processing")),
@@ -522,8 +536,14 @@ class _OrdersPageState extends State<OrdersPage> {
                                           children: [
                                             Spacer(),
                                             CircularPercentIndicator(
-                                              circularStrokeCap: CircularStrokeCap.round,
-                                              lineWidth: 10,radius: 30, percent: 0.25,progressColor: Colors.white ,backgroundColor: Colors.white38,),
+                                              circularStrokeCap:
+                                                  CircularStrokeCap.round,
+                                              lineWidth: 10,
+                                              radius: 30,
+                                              percent: 0.25,
+                                              progressColor: Colors.white,
+                                              backgroundColor: Colors.white38,
+                                            ),
                                             Spacer()
                                           ],
                                         ),
@@ -541,13 +561,25 @@ class _OrdersPageState extends State<OrdersPage> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Spacer(),
-                                              Text(style: TextStyle(color: Colors.white),"Order Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                                              Text(
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                  "Order Date: ${DateFormat.MMMMEEEEd().format(now)}"),
                                               Spacer(),
-                                              Text(style: TextStyle(color: Colors.white),"Order Status: Placed"),
+                                              Text(
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                  "Order Status: Placed"),
                                               Spacer(),
-                                              Text(style: TextStyle(color: Colors.white),"Order Number: 01228"),
+                                              Text(
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                  "Order Number: 01228"),
                                               Spacer(),
-                                              Text(style: TextStyle(color: Colors.white),"Due Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                                              Text(
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                  "Due Date: ${DateFormat.MMMMEEEEd().format(now)}"),
                                               Spacer(),
                                             ],
                                           ),
@@ -557,11 +589,12 @@ class _OrdersPageState extends State<OrdersPage> {
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color:Color(0xFF685BFF ),
+                                    color: Color(0xFF685BFF),
                                     // color: Colors.amber.shade300,
                                   ),
-                                  height: MediaQuery.of(context).size.width * .08,
-                                  width: width* .22,
+                                  height:
+                                      MediaQuery.of(context).size.width * .08,
+                                  width: width * .22,
                                 ),
                               ),
                             )
