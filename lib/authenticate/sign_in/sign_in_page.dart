@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_responsive_dashboard/components/constants.dart';
 import 'package:store_responsive_dashboard/components/keyboard.dart';
@@ -9,6 +10,7 @@ import 'package:store_responsive_dashboard/pages/example.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/root.dart';
+import 'package:store_responsive_dashboard/widgets/responsive.dart';
 
 import '../../../constants/size_config.dart';
 
@@ -26,11 +28,12 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  bool isDesktop(BuildContext context) =>
-      MediaQuery.of(context).size.width >= 600;
+  loadImage() {
+    asset = SvgPicture.asset("/icons/signIn.svg");
+  }
 
-  bool isMobile(BuildContext context) =>
-      MediaQuery.of(context).size.width < 600;
+  SvgPicture? asset;
+
   final CurrentUser _auth = CurrentUser();
 
   String email = '';
@@ -38,9 +41,14 @@ class _SignInPageState extends State<SignInPage> {
   String error = '';
   bool loading = false;
 
-  @override
   void initState() {
-    // email = UserSimplePreferences.getUserEmail() ?? "";
+    loadImage();
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        loading = false;
+      });
+    });
+
     super.initState();
   }
 
@@ -68,127 +76,164 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    print(width);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(),
       body: SafeArea(
-        child: Center(
-          child: SizedBox(
-            width: 400,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.screenHeight * 0.04),
-                    Text(
-                      "Welcome Back",
-                      style: headingStyle,
-                    ),
-                    const Text(
-                      "Sign in with your email and password  \nor continue with social media",
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.08),
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          buildEmailFormField(),
-                          const SizedBox(height: 10),
-                          buildPasswordFormField(),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: remember,
-                                activeColor: kPrimaryColor,
-                                onChanged: (value) {
-                                  setState(() {
-                                    remember = value;
-                                  });
-                                },
-                              ),
-                              const Text("Remember me"),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {},
-                                child: const Text(
-                                  "Forgot Password",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline),
+        child: SizedBox(
+          height: height,
+          width: width,
+          child: Row(
+            children: [
+              ResponsiveWidget.isSmallScreen(context)
+                  ? SizedBox()
+                  : Expanded(
+                      child: Center(
+                      child: Container(
+                        height: height * 0.5,
+                        child: asset,
+                      ),
+                    )),
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Card(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: SizedBox(
+                        width: ResponsiveWidget.isSmallScreen(context)
+                            ? width * 0.85
+                            : 400,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    height: SizeConfig.screenHeight * 0.04),
+                                Text(
+                                  "Welcome Back",
+                                  style: headingStyle,
                                 ),
-                              )
-                            ],
-                          ),
-                          FormError(errors: errors),
-                          const SizedBox(height: 20),
-                          DefaultButton(
-                            text: "Continue",
-                            press: () async {
-                              if (_formKey.currentState!.validate()) {
-                                // setState(() {
-                                //   loading = true;
-                                // });
-                                SharedPreferences pref =
-                                    await SharedPreferences.getInstance();
-                                pref.setString("email", email);
-                                pref.setString("password", password);
+                                const Text(
+                                  "Sign in with your email and password",
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                    height: SizeConfig.screenHeight * 0.08),
+                                Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      buildEmailFormField(),
+                                      const SizedBox(height: 10),
+                                      buildPasswordFormField(),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Checkbox(
+                                            value: remember,
+                                            activeColor: kPrimaryColor,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                remember = value;
+                                              });
+                                            },
+                                          ),
+                                          const Text("Remember me"),
+                                          const Spacer(),
+                                          GestureDetector(
+                                            onTap: () {},
+                                            child: const Text(
+                                              "Forgot Password",
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      FormError(errors: errors),
+                                      const SizedBox(height: 10),
+                                      DefaultButton(
+                                        text: "Continue",
+                                        press: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            // setState(() {
+                                            //   loading = true;
+                                            // });
+                                            SharedPreferences pref =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            pref.setString("email", email);
+                                            pref.setString(
+                                                "password", password);
 
-                                KeyboardUtil.hideKeyboard(context);
+                                            KeyboardUtil.hideKeyboard(context);
 
-                                dynamic result =
-                                    await _auth.signInWithEmailAndPassword(
-                                        email, password);
+                                            dynamic result = await _auth
+                                                .signInWithEmailAndPassword(
+                                                    email, password);
 
-                                if (result == "success") {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Root(),
+                                            if (result == "success") {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => Root(),
+                                                ),
+                                              );
+                                            } else {
+                                              setState(() {
+                                                loading = false;
+                                                error =
+                                                    "Please give me the correct details";
+                                              });
+                                            }
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                        child: Text(error),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Don’t have an account? ",
+                                      style: TextStyle(fontSize: 16),
                                     ),
-                                  );
-                                } else {
-                                  setState(() {
-                                    loading = false;
-                                    error =
-                                        "Please give me the correct details";
-                                  });
-                                }
-                              }
-                            },
+                                    GestureDetector(
+                                      onTap: () {
+                                        widget.toggleView();
+                                      },
+                                      child: const Text(
+                                        "Sign Up",
+                                        style: TextStyle(
+                                            fontSize: 16, color: kPrimaryColor),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                          SizedBox(
-                            height: 20,
-                            child: Text(error),
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.08),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don’t have an account? ",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            widget.toggleView();
-                          },
-                          child: const Text(
-                            "Sign Up",
-                            style:
-                                TextStyle(fontSize: 20, color: kPrimaryColor),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

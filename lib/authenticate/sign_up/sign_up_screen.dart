@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:store_responsive_dashboard/authenticate/sign_up/laundry_details.dart';
 import 'package:store_responsive_dashboard/components/constants.dart';
@@ -14,6 +15,7 @@ import 'package:store_responsive_dashboard/constants/form_error.dart';
 import 'package:store_responsive_dashboard/pages/example.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/root.dart';
+import 'package:store_responsive_dashboard/widgets/responsive.dart';
 
 class SignUpScreen extends StatefulWidget {
   final Function toggleView;
@@ -26,8 +28,26 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  @override
+  void initState() {
+    loadImage();
+    Future.delayed(Duration(seconds: 3), () {
+      setState(() {
+        loading = false;
+      });
+    });
+
+    super.initState();
+  }
+
   final formKey = GlobalKey<FormState>();
-  final List<String> roleItems = ['Staff', 'Manager', 'Owner'];
+  final List<String> roleItems = ['Manager', 'Owner'];
+
+  loadImage() {
+    asset = SvgPicture.asset("/icons/signUp.svg");
+  }
+
+  SvgPicture? asset;
 
   String? selectedValue;
 
@@ -43,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String role = '';
 
   String error = '';
-  bool loading = false;
+  bool loading = true;
 
   final CurrentUser _auth = CurrentUser();
   final jobRole = TextEditingController();
@@ -88,206 +108,260 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return loading
         ? Container()
         : Scaffold(
-            body: Center(
-            child: SafeArea(
-              child: SizedBox(
-                width: 350,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 15), // 4%
-                        Text("Register Business", style: headingStyle),
-                        const SizedBox(
-                          height: 10,
+            backgroundColor: Colors.white,
+            body: SizedBox(
+              height: height,
+              width: width,
+              child: Row(
+                children: [
+                  ResponsiveWidget.isSmallScreen(context)
+                      ? const SizedBox()
+                      : Expanded(
+                          child: Center(
+                            child: Container(
+                              height: height * .65,
+                              child: asset,
+                            ),
+                          ),
                         ),
+                  Expanded(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          elevation: 0,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: SizedBox(
+                            width: ResponsiveWidget.isSmallScreen(context)
+                                ? width * 0.85
+                                : 400,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(height: 15), // 4%
+                                    Text("Register Business",
+                                        style: headingStyle),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
 
-                        const Text(
-                          "Lets Set up your laundromat",
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 15),
-                        Column(
-                          children: [
-                            Form(
-                              key: formKey,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  DropdownButtonFormField2<String>(
-                                    isExpanded: true,
-                                    decoration: InputDecoration(
-                                      // Add Horizontal padding using menuItemStyleData.padding so it matches
-                                      // the menu padding when button's width is not specified.
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 16),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      // Add more decoration..
+                                    Text(
+                                      "Join the Team, Let's build together.",
+                                      textAlign: TextAlign.center,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
                                     ),
-                                    hint: const Text(
-                                      'Select Your Role',
-                                      // style: TextStyle(fontSize: 14),
-                                    ),
-                                    items: roleItems
-                                        .map((item) => DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(
-                                                item,
-                                                style: const TextStyle(
-                                                    // fontSize: 14,
-                                                    ),
+                                    const SizedBox(height: 15),
+                                    Column(
+                                      children: [
+                                        Form(
+                                          key: formKey,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                height: 15,
                                               ),
-                                            ))
-                                        .toList(),
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return 'Please Select your Role';
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value) {
-                                      role = value ?? '';
-                                    },
-                                    onSaved: (value) {
-                                      selectedValue = value.toString();
-                                    },
-                                    buttonStyleData: const ButtonStyleData(
-                                      padding: EdgeInsets.only(right: 8),
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        Icons.arrow_drop_down,
-                                        color: Colors.black45,
-                                      ),
-                                      iconSize: 24,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 16),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  buildFirstNameFormField(),
-                                  const SizedBox(height: 15),
-                                  buildPhoneNumberFormField(),
-                                  const SizedBox(height: 15),
-                                  buildEmailFormField(),
-                                  const SizedBox(height: 15),
-                                  buildLaundryNameFormField(),
-                                  const SizedBox(height: 15),
-                                  buildPasswordFormField(),
-                                  const SizedBox(height: 15),
-                                  buildConfirmPasswordFormField(),
-                                  FormError(errors: errors),
-                                  const SizedBox(height: 15),
-                                  DefaultButton(
-                                    text: "Register",
-                                    press: () async {
-                                      if (formKey.currentState!.validate()) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-
-                                        // await UserSimplePreferences
-                                        //     .setUserEmail(email);
-                                        // await UserSimplePreferences.setUserName(
-                                        //     userName);
-                                        // await UserSimplePreferences
-                                        //     .setUserPhone(phoneNumber);
-
-                                        KeyboardUtil.hideKeyboard(context);
-
-                                        dynamic result = await _auth
-                                            .signUpWithEmailAndPassword(
-                                                role,
-                                                email,
-                                                password,
-                                                userName,
-                                                phoneNumber,
-                                                address,
-                                                laundromatName);
-
-                                        if (result == "success") {
-                                          setState(() {
-                                            loading = false;
-                                            Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => LaundryDetails(),
+                                              DropdownButtonFormField2<String>(
+                                                isExpanded: true,
+                                                decoration: InputDecoration(
+                                                  // Add Horizontal padding using menuItemStyleData.padding so it matches
+                                                  // the menu padding when button's width is not specified.
+                                                  contentPadding:
+                                                      const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 16),
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                  // Add more decoration..
+                                                ),
+                                                hint: const Text(
+                                                  'Select Your Role',
+                                                  // style: TextStyle(fontSize: 14),
+                                                ),
+                                                items: roleItems
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value: item,
+                                                          child: Text(
+                                                            item,
+                                                            style: const TextStyle(
+                                                                // fontSize: 14,
+                                                                ),
+                                                          ),
+                                                        ))
+                                                    .toList(),
+                                                validator: (value) {
+                                                  if (value == null) {
+                                                    return 'Please Select your Role';
+                                                  }
+                                                  return null;
+                                                },
+                                                onChanged: (value) {
+                                                  role = value ?? '';
+                                                },
+                                                onSaved: (value) {
+                                                  selectedValue =
+                                                      value.toString();
+                                                },
+                                                buttonStyleData:
+                                                    const ButtonStyleData(
+                                                  padding:
+                                                      EdgeInsets.only(right: 8),
+                                                ),
+                                                iconStyleData:
+                                                    const IconStyleData(
+                                                  icon: Icon(
+                                                    Icons.arrow_drop_down,
+                                                    color: Colors.black45,
+                                                  ),
+                                                  iconSize: 24,
+                                                ),
+                                                dropdownStyleData:
+                                                    DropdownStyleData(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                  ),
+                                                ),
+                                                menuItemStyleData:
+                                                    const MenuItemStyleData(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 16),
+                                                ),
                                               ),
-                                              (route) => false,
-                                            );
-                                          });
-                                        } else {
-                                          setState(() {
-                                            loading = false;
-                                          });
-                                        }
-                                      }
-                                    },
-                                  ),
-                                ],
+                                              const SizedBox(height: 15),
+                                              buildFirstNameFormField(),
+                                              const SizedBox(height: 15),
+                                              buildPhoneNumberFormField(),
+                                              const SizedBox(height: 15),
+                                              buildEmailFormField(),
+                                              const SizedBox(height: 15),
+                                              buildLaundryNameFormField(),
+                                              const SizedBox(height: 15),
+                                              buildPasswordFormField(),
+                                              const SizedBox(height: 15),
+                                              buildConfirmPasswordFormField(),
+                                              FormError(errors: errors),
+                                              const SizedBox(height: 15),
+                                              DefaultButton(
+                                                text: "Register",
+                                                press: () async {
+                                                  if (formKey.currentState!
+                                                      .validate()) {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+
+                                                    // await UserSimplePreferences
+                                                    //     .setUserEmail(email);
+                                                    // await UserSimplePreferences.setUserName(
+                                                    //     userName);
+                                                    // await UserSimplePreferences
+                                                    //     .setUserPhone(phoneNumber);
+
+                                                    KeyboardUtil.hideKeyboard(
+                                                        context);
+
+                                                    dynamic result = await _auth
+                                                        .signUpWithEmailAndPassword(
+                                                            role,
+                                                            email,
+                                                            password,
+                                                            userName,
+                                                            phoneNumber,
+                                                            address,
+                                                            laundromatName);
+
+                                                    if (result == "success") {
+                                                      setState(() {
+                                                        loading = false;
+                                                        Navigator
+                                                            .pushAndRemoveUntil(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                LaundryDetails(),
+                                                          ),
+                                                          (route) => false,
+                                                        );
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        loading = false;
+                                                      });
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Text(
+                                          "Already a user? ",
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            widget.toggleView();
+                                          },
+                                          child: const Text(
+                                            "Sign In",
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                color: kPrimaryColor),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 15),
+
+                                    Text(
+                                      'By continuing your confirm that you agree \nwith our Terms and Conditions',
+                                      textAlign: TextAlign.center,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                    const SizedBox(height: 15),
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-
-                        const SizedBox(
-                          height: 15,
-                        ),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Already a user? ",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                widget.toggleView();
-                              },
-                              child: const Text(
-                                "Sign In",
-                                style: TextStyle(
-                                    fontSize: 20, color: kPrimaryColor),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 15),
-
-                        const SizedBox(height: 10),
-                        Text(
-                          'By continuing your confirm that you agree \nwith our Terms and Conditions',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ),
-          ));
+            ));
   }
 
   TextFormField buildPasswordFormField() {
@@ -317,7 +391,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         labelText: "Password",
         hintText: "Enter your password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
       ),
     );
   }
@@ -353,7 +427,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Mail.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
       ),
     );
   }
@@ -383,7 +457,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "/icons/User.svg"),
       ),
     );
   }
@@ -413,7 +487,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Phone.svg"),
       ),
     );
   }
@@ -445,7 +519,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Lock.svg"),
+        suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
       ),
     );
   }
