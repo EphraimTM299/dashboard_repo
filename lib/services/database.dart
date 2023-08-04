@@ -38,10 +38,12 @@ class MyDatabase {
         "Email": user?.email,
         "Phone": user?.phoneNumber,
         "Location": user?.address,
-        "LaundromatName": user?.laundromatName,
+        "name": user?.laundromatName,
         "AccountCreated": Timestamp.now(),
         "status": "Inactive",
-        "new":"new"
+        "rating": 0.0,
+        "distance": 0.0,
+        "turnAround": "24"
       });
       retVal = "success";
     } catch (e) {
@@ -51,5 +53,3 @@ class MyDatabase {
     return retVal;
   }
 }
-
-

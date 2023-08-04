@@ -15,10 +15,12 @@ class Laundromats {
   final double rating;
   final String city;
   final String turnAround;
-  final String special_offers;
+  final String specialOffers;
+  final String numberOfLocations;
   double deliveryPrice;
 
   Laundromats({
+    required this.numberOfLocations,
     required this.deliveryPrice,
     required this.address,
     required this.name,
@@ -29,7 +31,7 @@ class Laundromats {
     required this.rating,
     required this.city,
     required this.turnAround,
-    required this.special_offers,
+    required this.specialOffers,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,7 +42,7 @@ class Laundromats {
       'imagePath': imagePath,
       'location': location,
       'products': tempProducts,
-      'special_offers': special_offers,
+      'special_offers': specialOffers,
       'city': city,
       'distance': distance,
       'rating': rating,
@@ -63,9 +65,10 @@ class Laundromats {
         distance: map['distance'].toDouble(),
         rating: map['rating'].toDouble(),
         turnAround: map['turnAround'].toString(),
-        special_offers: map['special_offers'].toString(),
+        specialOffers: map['special_offers'].toString(),
         products: tempProducts,
         address: map['address'].toString(),
+        numberOfLocations: map['address'].toString(),
         deliveryPrice: map['deliveryPrice'].toDouble());
   }
 

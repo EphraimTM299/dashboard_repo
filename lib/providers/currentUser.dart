@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:store_responsive_dashboard/models/User.dart';
+import 'package:store_responsive_dashboard/providers/laundromat.dart';
 import 'package:store_responsive_dashboard/services/database.dart';
 
 class CurrentUser extends ChangeNotifier {
@@ -15,22 +16,20 @@ class CurrentUser extends ChangeNotifier {
   Future<String> onStartUp() async {
     String retVal = "error";
 
-    
     User _firebaseUser = await _auth.currentUser!;
     final uid = _firebaseUser.uid;
-    
+
     final DocumentSnapshot userDoc =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
- 
+
     _currentUser = MyUser.fromMap(userDoc.data() as Map<String, dynamic>);
-    
 
     retVal = "success";
-   
+
     notifyListeners();
     return retVal;
   }
-  
+
   Future<String> signOut() async {
     String retVal = "error";
 
@@ -64,20 +63,14 @@ class CurrentUser extends ChangeNotifier {
     return retVal;
   }
 
-  Future<String> updateLaundromatDetails() async{
+  Future<String> updateLaundromatDetails() async {
     String retVal = "error";
-  try {
-        
-        
-
-        retVal = "success";
-      } catch (e) {}
-      notifyListeners();
-      return retVal;
-    
+    try {
+      retVal = "success";
+    } catch (e) {}
+    notifyListeners();
+    return retVal;
   }
-
-
 
   Future<String> signUpWithEmailAndPassword(
       String role,
@@ -106,9 +99,7 @@ class CurrentUser extends ChangeNotifier {
       );
 
 // Create user in Firestore
-      String _returnString = await MyDatabase()
-          .createUser(_user)
-          .then((value) => MyDatabase().createLaundromat(_user));
+      String _returnString = await MyDatabase().createUser(_user);
       if (_returnString == "success") {
         retVal = "success";
       }

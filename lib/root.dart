@@ -6,6 +6,7 @@ import 'package:store_responsive_dashboard/authenticate/authenticate.dart';
 
 import 'package:store_responsive_dashboard/pages/example.dart';
 import 'package:store_responsive_dashboard/pages/orders.dart';
+import 'package:store_responsive_dashboard/pages/verification_email.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 
 enum AuthStatus { notLoggedIn, loggedIn }
@@ -56,7 +57,7 @@ class _RootState extends State<Root> {
         retVal = Authenticate();
         break;
       case AuthStatus.loggedIn:
-        retVal = MyHomepage();
+        retVal = VerifyEmailPage();
         break;
       default:
     }

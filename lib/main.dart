@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:get/get.dart';
+import 'package:store_responsive_dashboard/authenticate/sign_up/more_details.dart';
+import 'package:store_responsive_dashboard/authenticate/sign_up/signup_successful.dart';
 import 'package:store_responsive_dashboard/constants/theme.dart';
+import 'package:store_responsive_dashboard/pages/test.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
+import 'package:store_responsive_dashboard/providers/laundromat.dart';
 import 'package:store_responsive_dashboard/providers/ordersData.dart';
 import 'package:store_responsive_dashboard/root.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,10 +35,12 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => CurrentUser()),
         ChangeNotifierProvider(create: (context) => OrdersData()),
+        ChangeNotifierProvider(create: (context) => Laundry()),
       ],
       child: GetMaterialApp(
-        title: 'Laundry Admin Dashboard',
+        title: 'Admin Dashboard',
         theme: theme(),
+        // home: MoreDetails(),
         home: Root(),
         debugShowCheckedModeBanner: false,
       ),

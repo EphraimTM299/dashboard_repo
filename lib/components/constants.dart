@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:store_responsive_dashboard/constants/size_config.dart';
 
+const String apiKey = "AIzaSyCc0hf3JU_NQNcZwc-5UPWxdrXiXZ8cbsM";
+
 const double defaultPadding = 16.0;
 
 const kPrimaryColor = Color.fromARGB(255, 33, 36, 247);
@@ -47,7 +49,9 @@ const String kInvalidEmailError = "Please Enter Valid Email";
 const String kPassNullError = "Please Enter your password";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
+const String kcitylNullError = "Please Enter your city name";
 const String kNamelNullError = "Please Enter your name";
+const String kTurnlNullError = "Please Enter your Turn Around Time";
 const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kAddressNullError = "Please Enter your address";
 
