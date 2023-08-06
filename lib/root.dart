@@ -57,7 +57,7 @@ class _RootState extends State<Root> {
         retVal = Authenticate();
         break;
       case AuthStatus.loggedIn:
-        retVal = VerifyEmailPage();
+        retVal = Authenticate();
         break;
       default:
     }

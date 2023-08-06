@@ -188,18 +188,14 @@ class _LaundryDetailsState extends State<LaundryDetails> {
                                           loading = true;
                                         });
 
-                                       
-
                                         KeyboardUtil.hideKeyboard(context);
 
                                         dynamic result = await _auth
                                             .signUpWithEmailAndPassword(
-                                                role,
                                                 email,
                                                 password,
                                                 userName,
                                                 phoneNumber,
-                                                address,
                                                 laundromatName);
 
                                         if (result == "success") {

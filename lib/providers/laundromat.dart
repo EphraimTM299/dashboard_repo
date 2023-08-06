@@ -1,24 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:store_responsive_dashboard/models/products.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 
 class Laundry extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 //  userDetails
+
   String? userName;
   String? phoneNumber;
   String? role;
   String? email;
 
 //  laundromat details
+
   String? address;
   String? laundromatName;
   String? imagePath;
-  // GeoPoint? location;
+  GeoPoint? location;
   String? laundryType;
 
-  // List?<Products> products;
+  List<Products>? products;
   double? distance;
   double? rating;
   String? city;
@@ -27,38 +30,56 @@ class Laundry extends ChangeNotifier {
   String? numberOfLocations;
 
   // banking
+
   int? bankAccountNumber;
   String? bankName;
   int? branchCode;
   String? accountHolder;
 
   // update use data
+
   void updateUserData(
+    // user
 
-      // user
-      String newUserName,
-      String newPhoneNumber,
-      String newRole,
-      String newEmail,
+    String newUserName,
+    String newPhoneNumber,
+    String newRole,
+    String newEmail,
+  ) {
+    userName = newUserName;
+    phoneNumber = newPhoneNumber;
+    role = newRole;
+    email = newEmail;
 
-      // laundromat
+    // Notify Listners
+    notifyListeners();
+  }
+
+// business data update
+
+  void updateBusinessData(
       String newAddress,
       String newName,
       String newCity,
       double newRating,
       String newTurnAround,
+      String newLaundromatName,
+      GeoPoint newLocation,
       double newDistance,
       String newLaundryType,
       String newNumberOfLocations) {
+    // variables
+
+    turnAround = newTurnAround;
+    rating = newRating;
     address = newAddress;
-    laundromatName = newName;
     laundryType = newLaundryType;
     distance = newDistance;
     turnAround = newTurnAround;
     city = newCity;
-
-    // Notify Listners
-    notifyListeners();
+    location = newLocation;
+    numberOfLocations = newNumberOfLocations;
+    laundromatName = newLaundromatName;
   }
 
   void updateBankDetails(String newBankName, int newAccountNumber,
@@ -73,25 +94,12 @@ class Laundry extends ChangeNotifier {
   }
 
   void createLaundromat(BuildContext context) {
-    _firestore.collection("laundromat").doc().set({
+    _firestore.collection("laundromat").add({
       "uid":
           Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.uid,
-      "Name": Provider.of<CurrentUser>(context, listen: false)
-          .getCurrentUser
-          ?.firstName,
-      "Email": Provider.of<CurrentUser>(context, listen: false)
-          .getCurrentUser
-          ?.email,
-      "Phone": Provider.of<CurrentUser>(context, listen: false)
-          .getCurrentUser
-          ?.phoneNumber,
-      "address": Provider.of<CurrentUser>(context, listen: false)
-          .getCurrentUser
-          ?.address,
-      "name": Provider.of<CurrentUser>(context, listen: false)
-          .getCurrentUser
-          ?.laundromatName,
-      "AccountCreated": Timestamp.now(),
+      "laundryType": laundryType,
+      "laundromatName": laundromatName,
+      "accountCreated": Timestamp.now(),
       "status": "Inactive",
       "rating": rating,
       "distance": distance,
@@ -100,7 +108,17 @@ class Laundry extends ChangeNotifier {
       "imagePath": "",
       "city": city,
       "numberOfLocation": numberOfLocations,
-      "role": role
+      "address": address,
+      "role": role,
+      "location": location,
+      "email": email,
+      "userName": userName,
+      "userPhone": phoneNumber,
+      "userEmail": email,
+      "userUid":
+          Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.uid
     });
   }
+
+  notifyListeners();
 }

@@ -1,30 +1,97 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places_web/flutter_google_places_web.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocode/geocode.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:store_responsive_dashboard/authenticate/sign_up/signup_successful.dart';
 import 'package:store_responsive_dashboard/components/constants.dart';
 import 'package:store_responsive_dashboard/components/keyboard.dart';
-import 'package:store_responsive_dashboard/constants/custom_surfix_icon.dart';
 import 'package:store_responsive_dashboard/constants/default_button.dart';
 import 'package:store_responsive_dashboard/constants/form_error.dart';
 import 'package:store_responsive_dashboard/constants/size_config.dart';
-import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/providers/laundromat.dart';
 import 'package:store_responsive_dashboard/widgets/responsive.dart';
 
 class MoreDetails extends StatefulWidget {
-  const MoreDetails({super.key});
+  const MoreDetails({
+    super.key,
+  });
 
   @override
   State<MoreDetails> createState() => _MoreDetailsState();
 }
 
 class _MoreDetailsState extends State<MoreDetails> {
+  GeoCode geoCode = GeoCode();
   @override
   void initState() {
     loadImage();
     super.initState();
+  }
+
+  Future<GeoPoint> geoCodedResult(String laundryAddress) async {
+    Coordinates coordinates = await geoCode.forwardGeocoding(
+      address: address,
+    );
+
+    var latitude = coordinates.latitude;
+    var longitude = coordinates.longitude;
+    location = GeoPoint(latitude ?? 0.0, longitude ?? 0.0);
+
+    laundryLocation = location ?? GeoPoint(0, 0);
+
+    return laundryLocation;
+  }
+
+  String address = '';
+  String laundromatName = '';
+  GeoPoint? location;
+  GeoPoint laundryLocation = GeoPoint(0, 0);
+  String status = 'Inactive';
+  String role = '';
+  String numberOfLocations = '';
+  String laundryT = '';
+  String city = '';
+  String turnAround = '';
+  double distance = 0.0;
+  double rating = 0.0;
+
+  final List<String> laundryType = [
+    'Laundromat',
+    'Dry Cleaner',
+    "Shoe Laundry",
+    "Carpet Cleaner",
+    "Laundromat & Dry Cleaner"
+  ];
+
+  final List<String> number = ["1", "2", "3", "4", "5 or more"];
+
+  PlatformFile? pickedFile;
+// upload to firebase
+  Future uploadFile() async {
+    final path = 'pricelist/${pickedFile!.name}';
+    final file = File(pickedFile!.path!);
+
+    // upload file to firebase
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(file);
+  }
+
+// selecting the file
+  Future selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+    });
   }
 
   final formKey = GlobalKey<FormState>();
@@ -36,14 +103,10 @@ class _MoreDetailsState extends State<MoreDetails> {
 
   SvgPicture? asset;
   String? selectedValue;
-  String turnAround = '';
-  String status = 'Inactive';
 
-  String city = ' ';
   String error = '';
-  bool loading = true;
 
-  final CurrentUser _auth = CurrentUser();
+  // final CurrentUser _auth = CurrentUser();
   final jobRole = TextEditingController();
 
   // void _signUpUser(String email, String password, BuildContext context) async {
@@ -86,7 +149,6 @@ class _MoreDetailsState extends State<MoreDetails> {
 
   @override
   Widget build(BuildContext context) {
-    print(Provider.of<Laundry>(context, listen: false).email);
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -143,44 +205,104 @@ class _MoreDetailsState extends State<MoreDetails> {
                                       key: formKey,
                                       child: Column(
                                         children: [
-                                          const SizedBox(height: 15),
                                           SizedBox(
-                                            height: 15,
+                                            height: 5,
                                           ),
-                                          buildTurnAroundTimeFormField(),
+                                          Text("Business Details",
+                                              style: headingStyle),
                                           const SizedBox(height: 15),
-                                          Text(
-                                              "Please Upload a pdf or picture of your Pricelist"),
+                                          buildLaundryTypeDropdown(),
                                           const SizedBox(height: 15),
-                                          SizedBox(
-                                            width: width * 0.10,
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    60),
-                                            child: ElevatedButton(
-                                              style: TextButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                primary: Colors.white,
-                                                backgroundColor:
-                                                    Colors.blue[300],
-                                              ),
-                                              onPressed: () {},
-                                              child: Text(
-                                                "Upload Pricelist",
-                                                style: TextStyle(
-                                                  fontSize:
-                                                      getProportionateScreenWidth(
-                                                          18),
-                                                  color: Colors.white,
-                                                ),
-                                              ),
+                                          buildLaundryNameFormField(),
+                                          const SizedBox(height: 15),
+                                          FlutterGooglePlacesWeb(
+                                            decoration: InputDecoration(
+                                              labelText: "Address",
+                                              hintText:
+                                                  "Enter your Business Address",
                                             ),
+                                            apiKey: apiKey,
+                                            components: "country:za",
+                                            proxyURL:
+                                                'https://cors-anywhere.herokuapp.com/',
+                                            required: true,
                                           ),
                                           const SizedBox(height: 15),
+                                          buildNumberOfLocations(),
+                                          const SizedBox(height: 15),
+                                          const SizedBox(height: 15),
+                                          buildTurnAroundTimeFormField(),
                                           FormError(errors: errors),
+                                          SizedBox(
+                                              height: pickedFile?.name == null
+                                                  ? 15
+                                                  : 0),
+                                          pickedFile?.name == null
+                                              ? SizedBox()
+                                              : SizedBox(
+                                                  height: 100,
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(Icons
+                                                            .file_copy_outlined),
+                                                        SizedBox(
+                                                          width: 5,
+                                                        ),
+                                                        Text(pickedFile?.name ??
+                                                            ''),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                          pickedFile?.name == null
+                                              ? Text(
+                                                  "Please Upload a copy of your Pricelist")
+                                              : SizedBox(),
+                                          SizedBox(
+                                              height: pickedFile?.name == null
+                                                  ? 15
+                                                  : 0),
+                                          pickedFile?.name == null
+                                              ? SizedBox(
+                                                  width: width * 0.10,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          60),
+                                                  child: ElevatedButton(
+                                                    style: TextButton.styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15)),
+                                                      primary: Colors.white,
+                                                      backgroundColor:
+                                                          Colors.blue[300],
+                                                    ),
+                                                    onPressed: () {
+                                                      selectFile();
+                                                    },
+                                                    child: Text(
+                                                      "Upload Pricelist",
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            getProportionateScreenWidth(
+                                                                18),
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : SizedBox(),
+                                          SizedBox(
+                                              height: pickedFile?.name == null
+                                                  ? 15
+                                                  : 0),
                                           const SizedBox(height: 15),
                                           DefaultButton(
                                             text: "Complete  Registration",
@@ -188,58 +310,48 @@ class _MoreDetailsState extends State<MoreDetails> {
                                               if (formKey.currentState!
                                                   .validate()) {
                                                 setState(() {
-                                                  loading = true;
+                                                  address =
+                                                      FlutterGooglePlacesWeb
+                                                              .value['name'] ??
+                                                          '';
+                                                  city = FlutterGooglePlacesWeb
+                                                          .value['city'] ??
+                                                      '';
+
+                                                  print(address);
+                                                  geoCodedResult(address);
+                                                  print(laundryLocation);
+                                                  print(location?.longitude);
                                                 });
 
-                                                Navigator.push(
-                                                    context,
-                                                    PageTransition(
-                                                        child: SignUpSuccess(),
-                                                        type: PageTransitionType
-                                                            .fade));
-
-                                                // await UserSimplePreferences
-                                                //     .setUserEmail(email);
-                                                // await UserSimplePreferences.setUserName(
-                                                //     userName);
-                                                // await UserSimplePreferences
-                                                //     .setUserPhone(phoneNumber);
-
-                                                KeyboardUtil.hideKeyboard(
-                                                    context);
-
-                                                // dynamic result = await _auth
-                                                //     .signUpWithEmailAndPassword(
-                                                //         role,
-                                                //         email,
-                                                //         password,
-                                                //         userName,
-                                                //         phoneNumber,
-                                                //         address,
-                                                //         laundromatName);
-
-                                                // if (result == "success") {
-                                                //   setState(() {
-                                                //     loading = false;
-                                                //     Navigator
-                                                //         .pushAndRemoveUntil(
-                                                //       context,
-                                                //       MaterialPageRoute(
-                                                //         builder: (context) =>
-                                                //             LaundryDetails(),
-                                                //       ),
-                                                //       (route) => false,
-                                                //     );
-                                                //   });
-                                                // } else {
-                                                //   setState(() {
-                                                //     loading = false;
-                                                //   });
-                                                // }
+                                                // update the data
+                                                Provider.of<Laundry>(context,
+                                                        listen: false)
+                                                    .updateBusinessData(
+                                                        address,
+                                                        laundromatName,
+                                                        city,
+                                                        rating,
+                                                        turnAround,
+                                                        laundromatName,
+                                                        laundryLocation,
+                                                        distance,
+                                                        laundryT,
+                                                        numberOfLocations);
 
                                                 Provider.of<Laundry>(context,
                                                         listen: false)
                                                     .createLaundromat(context);
+
+                                                // Navigator.push(
+                                                //     context,
+                                                //     PageTransition(
+                                                //         child: SignUpSuccess(),
+                                                //         type: PageTransitionType
+                                                //             .fade));
+
+                                                KeyboardUtil.hideKeyboard(
+                                                    context);
                                               }
                                             },
                                           ),
@@ -248,24 +360,6 @@ class _MoreDetailsState extends State<MoreDetails> {
                                     ),
                                   ],
                                 ),
-
-                                // Row(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: [
-                                //     const Text(
-                                //       "Already a user? ",
-                                //       style: TextStyle(fontSize: 18),
-                                //     ),
-                                //     GestureDetector(
-                                //       onTap: () {},
-                                //       child: const Text(
-                                //         "Sign In",
-                                //         style: TextStyle(
-                                //             fontSize: 18, color: kPrimaryColor),
-                                //       ),
-                                //     ),
-                                //   ],
-                                // ),
 
                                 const SizedBox(height: 15),
 
@@ -289,32 +383,159 @@ class _MoreDetailsState extends State<MoreDetails> {
         ));
   }
 
-  TextFormField buildCityFormField() {
+  Widget buildLaundryTypeDropdown() {
+    return DropdownButtonFormField2<String>(
+      isExpanded: true,
+      decoration: InputDecoration(
+        // Add Horizontal padding using menuItemStyleData.padding so it matches
+        // the menu padding when button's width is not specified.
+
+        labelText: "Business Type",
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        // Add more decoration..
+      ),
+      hint: const Text(
+        'Business Type',
+        // style: TextStyle(fontSize: 14),
+      ),
+      items: laundryType
+          .map((item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: const TextStyle(
+                      // fontSize: 14,
+                      ),
+                ),
+              ))
+          .toList(),
+      validator: (value) {
+        if (value == null) {
+          return 'Please Select Business TYpe';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        laundryT = value ?? '';
+      },
+      onSaved: (value) {
+        selectedValue = value.toString();
+      },
+      buttonStyleData: const ButtonStyleData(
+        padding: EdgeInsets.only(right: 8),
+      ),
+      iconStyleData: const IconStyleData(
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black45,
+        ),
+        iconSize: 24,
+      ),
+      dropdownStyleData: DropdownStyleData(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      menuItemStyleData: const MenuItemStyleData(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+      ),
+    );
+  }
+
+  Widget buildNumberOfLocations() {
+    return DropdownButtonFormField2<String>(
+      isExpanded: true,
+      decoration: InputDecoration(
+        // Add Horizontal padding using menuItemStyleData.padding so it matches
+        // the menu padding when button's width is not specified.
+        focusColor: Colors.white,
+        hoverColor: Colors.white,
+        fillColor: Colors.white,
+        labelText: "Locations",
+        hintText: "Enter Number of Locations",
+        border: OutlineInputBorder(
+          gapPadding: 4,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        // Add more decoration..
+      ),
+      hint: const Text(
+        'Number of Locations',
+        // style: TextStyle(fontSize: 14),
+      ),
+      items: number
+          .map((item) => DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: const TextStyle(
+                      // fontSize: 14,
+                      ),
+                ),
+              ))
+          .toList(),
+      validator: (value) {
+        if (value == null) {
+          return 'Please Select the number 0f Locations';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        numberOfLocations = value ?? '';
+      },
+      onSaved: (value) {
+        selectedValue = value.toString();
+      },
+      buttonStyleData: const ButtonStyleData(
+        padding: EdgeInsets.only(right: 8),
+      ),
+      iconStyleData: const IconStyleData(
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Colors.black45,
+        ),
+        iconSize: 24,
+      ),
+      dropdownStyleData: DropdownStyleData(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      menuItemStyleData: const MenuItemStyleData(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+      ),
+    );
+  }
+
+  TextFormField buildLaundryNameFormField() {
     return TextFormField(
       onChanged: (value) {
         setState(() {
-          city = value;
+          laundromatName = value;
         });
 
         if (value.isNotEmpty) {
-          removeError(error: kcitylNullError);
+          removeError(error: kBusinessNullError);
         }
         return;
       },
       validator: (value) {
         if (value!.isEmpty) {
-          addError(error: kcitylNullError);
+          addError(error: kBusinessNullError);
           return "";
         }
         return null;
       },
       decoration: const InputDecoration(
-        labelText: "Turn Around Time",
-        hintText: "e.g. 24 hrs",
+        labelText: "Business Name",
+        hintText: "e.g. WashasRus",
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
       ),
     );
   }
@@ -328,13 +549,13 @@ class _MoreDetailsState extends State<MoreDetails> {
         });
 
         if (value.isNotEmpty) {
-          removeError(error: kcitylNullError);
+          removeError(error: kTurnAroundNullError);
         }
         return;
       },
       validator: (value) {
         if (value!.isEmpty) {
-          addError(error: kcitylNullError);
+          addError(error: kTurnAroundNullError);
           return "";
         }
         return null;

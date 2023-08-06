@@ -15,7 +15,7 @@ class SignUpSuccess extends StatefulWidget {
 class _SignUpSuccessState extends State<SignUpSuccess> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 10), () {
+    Future.delayed(Duration(days: 1), () {
       Navigator.pushAndRemoveUntil(
           context,
           PageTransition(child: Root(), type: PageTransitionType.fade),

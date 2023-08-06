@@ -52,6 +52,7 @@ dependencies:
   file_picker: ^5.3.3
   flutter_google_places_web: ^1.0.0
   location: ^5.0.1
+  geocode: ^1.0.3
 
 dev_dependencies:
   flutter_test:

@@ -16,7 +16,7 @@ class CurrentUser extends ChangeNotifier {
   Future<String> onStartUp() async {
     String retVal = "error";
 
-    User _firebaseUser = await _auth.currentUser!;
+    User _firebaseUser = _auth.currentUser!;
     final uid = _firebaseUser.uid;
 
     final DocumentSnapshot userDoc =
@@ -63,23 +63,8 @@ class CurrentUser extends ChangeNotifier {
     return retVal;
   }
 
-  Future<String> updateLaundromatDetails() async {
-    String retVal = "error";
-    try {
-      retVal = "success";
-    } catch (e) {}
-    notifyListeners();
-    return retVal;
-  }
-
-  Future<String> signUpWithEmailAndPassword(
-      String role,
-      String email,
-      String password,
-      String firstName,
-      String phoneNumber,
-      String address,
-      String laundromatName) async {
+  Future<String> signUpWithEmailAndPassword(String email, String password,
+      String firstName, String phoneNumber, String laundromatName) async {
     String retVal = "error";
     MyUser? _user;
 
@@ -90,12 +75,10 @@ class CurrentUser extends ChangeNotifier {
       _user = MyUser(
         firstName: firstName,
         phoneNumber: phoneNumber,
-        address: address,
         email: email,
         uid: _authResult.user?.uid ?? "",
         accountCreated: Timestamp.now(),
         laundromatName: laundromatName,
-        role: role,
       );
 
 // Create user in Firestore
@@ -110,10 +93,10 @@ class CurrentUser extends ChangeNotifier {
         retVal = "success";
       }
 
-      String _returnStringL = await MyDatabase().createLaundromat(_user);
-      if (_returnStringL == "success") {
-        retVal = "success";
-      }
+      // String _returnStringL = await MyDatabase().createLaundromat(_user);
+      // if (_returnStringL == "success") {
+      //   retVal = "success";
+      // }
 
       if (_authResult.user != null) {
         _currentUser!.uid = _authResult.user!.uid;

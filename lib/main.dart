@@ -6,9 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'package:get/get.dart';
 import 'package:store_responsive_dashboard/authenticate/sign_up/more_details.dart';
-import 'package:store_responsive_dashboard/authenticate/sign_up/signup_successful.dart';
 import 'package:store_responsive_dashboard/constants/theme.dart';
-import 'package:store_responsive_dashboard/pages/test.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/providers/laundromat.dart';
