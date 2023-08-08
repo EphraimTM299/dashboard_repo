@@ -83,7 +83,7 @@ class _OrdersPageState extends State<OrdersPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       body: Padding(
-        padding: const EdgeInsets.only(left: 8.0, top: 0, bottom: 35),
+        padding: const EdgeInsets.only(left: 8.0, top: 0, bottom: 0),
         child: Row(
           children: [
             Expanded(
@@ -187,9 +187,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(24)),
                                 child: Container(
-                                    height: 300,
-                                    width:
-                                        MediaQuery.of(context).size.width * .40,
+                                    height: 350,
+                                    width: width * .40,
                                     child: Padding(
                                       padding: const EdgeInsets.all(15.0),
                                       child: MyChart(isShowingMainData: true),
@@ -197,9 +196,6 @@ class _OrdersPageState extends State<OrdersPage> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            width: 20,
-                          ),
                           Column(
                             children: [
                               Text("Revenue Breakdown by Service"),
@@ -213,30 +209,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                         borderRadius:
                                             BorderRadius.circular(24)),
                                     child: Container(
-                                        width: width * .25,
-                                        height: 300,
-                                        child: PieChartSample2())),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            children: [
-                              Text("Revenue Breakdown by Service"),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(24)),
-                                    child: Container(
-                                        width: width * .25,
-                                        height: 300,
+                                        width: width * .23,
+                                        height: 350,
                                         child: PieChartSample2())),
                               ),
                             ],
@@ -358,9 +332,13 @@ class _OrdersPageState extends State<OrdersPage> {
               ),
             ),
             Container(
-              //  decoration: BoxDecoration(color: Colors.white, ),
+              decoration: BoxDecoration(
+                  // color: Colors.amber,
+                  ),
               height: height,
               child: Card(
+                // color: Colors.amber,
+                margin: EdgeInsets.all(0),
                 child: Padding(
                   padding:
                       const EdgeInsets.only(left: 10, right: 15.0, top: 15),
@@ -386,7 +364,9 @@ class _OrdersPageState extends State<OrdersPage> {
                                 ),
                                 Text(
                                   "Hi, ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.firstName} ",
-                                  style: headingStyle,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16),
                                 ),
                               ],
                             ),
@@ -401,204 +381,37 @@ class _OrdersPageState extends State<OrdersPage> {
                         height: 20,
                       ),
                       Container(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Upcoming orders( )",
-                              style: headingStyle,
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(20),
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: ((BuildContext context) {
-                                      return AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20)),
-                                        title: Row(
-                                          children: [
-                                            Text('Order: 01228'),
-                                            Spacer(),
-                                            InkWell(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child:
-                                                    Icon(Icons.cancel_outlined))
-                                          ],
-                                        ),
-                                        content: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          width: 450,
-                                          height: 200,
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 18.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Text(
-                                                        "Items",
-                                                        style: subheadingStyle,
-                                                      ),
-                                                      Spacer(),
-                                                      Text(
-                                                        "Service",
-                                                        style: subheadingStyle,
-                                                      ),
-                                                      Spacer(),
-                                                      Text(
-                                                        "Qty",
-                                                        style: subheadingStyle,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 18.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      Text("Small Bag"),
-                                                      Spacer(),
-                                                      Text("Service: Wash"),
-                                                      Spacer(),
-                                                      Text("2"),
-                                                      SizedBox(
-                                                        width: 3,
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 45.0,
-                                                      right: 45,
-                                                      top:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.10),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xFF685BFF),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(30)),
-                                                    height: 25,
-                                                    width: double.infinity,
-                                                    child: ElevatedButton(
-                                                        onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Text(
-                                                            "Start Processing")),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }));
-                              },
-                              child: Card(
-                                margin: EdgeInsets.all(0),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Spacer(),
-                                            CircularPercentIndicator(
-                                              circularStrokeCap:
-                                                  CircularStrokeCap.round,
-                                              lineWidth: 10,
-                                              radius: 30,
-                                              percent: 0.25,
-                                              progressColor: Colors.white,
-                                              backgroundColor: Colors.white38,
-                                            ),
-                                            Spacer()
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        VerticalDivider(
-                                          width: 3,
-                                          color: Colors.white,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Text(
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                  "Order Date: ${DateFormat.MMMMEEEEd().format(now)}"),
-                                              Spacer(),
-                                              Text(
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                  "Order Status: Placed"),
-                                              Spacer(),
-                                              Text(
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                  "Order Number: 01228"),
-                                              Spacer(),
-                                              Text(
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                  "Due Date: ${DateFormat.MMMMEEEEd().format(now)}"),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Color(0xFF685BFF),
-                                    // color: Colors.amber.shade300,
-                                  ),
-                                  height:
-                                      MediaQuery.of(context).size.width * .08,
-                                  width: width * .22,
-                                ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Upcoming orders( )",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w400, fontSize: 12),
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 15,
+                              ),
+                              UpdcomingOrder(
+                                  now: now, height: height, width: width),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              UpdcomingOrder(
+                                  now: now, height: height, width: width),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              UpdcomingOrder(
+                                  now: now, height: height, width: width),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              UpdcomingOrder(
+                                  now: now, height: height, width: width)
+                            ],
+                          ),
                         ),
                       )
                     ],
@@ -615,6 +428,188 @@ class _OrdersPageState extends State<OrdersPage> {
         onPressed: () {},
         child: const Icon(Icons.add),
         backgroundColor: Color(0xFF685BFF),
+      ),
+    );
+  }
+}
+
+class UpdcomingOrder extends StatelessWidget {
+  const UpdcomingOrder({
+    super.key,
+    required this.now,
+    required this.height,
+    required this.width,
+  });
+
+  final DateTime now;
+  final double height;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: ((BuildContext context) {
+              return AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                title: Row(
+                  children: [
+                    Text('Order: 01228'),
+                    Spacer(),
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Icon(Icons.cancel_outlined))
+                  ],
+                ),
+                content: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(30)),
+                  width: 450,
+                  height: 200,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Items",
+                                style: subheadingStyle,
+                              ),
+                              Spacer(),
+                              Text(
+                                "Service",
+                                style: subheadingStyle,
+                              ),
+                              Spacer(),
+                              Text(
+                                "Qty",
+                                style: subheadingStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("Small Bag"),
+                              Spacer(),
+                              Text("Service: Wash"),
+                              Spacer(),
+                              Text("2"),
+                              SizedBox(
+                                width: 3,
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 45.0,
+                              right: 45,
+                              top: MediaQuery.of(context).size.height * 0.10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xFF685BFF),
+                                borderRadius: BorderRadius.circular(30)),
+                            height: 25,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("Start Processing")),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
+      },
+      child: Card(
+        margin: EdgeInsets.all(0),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Column(
+                  children: [
+                    Spacer(),
+                    CircularPercentIndicator(
+                      circularStrokeCap: CircularStrokeCap.round,
+                      lineWidth: 10,
+                      radius: 30,
+                      percent: 0.25,
+                      progressColor: Colors.white,
+                      backgroundColor: Colors.white38,
+                    ),
+                    Spacer()
+                  ],
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                VerticalDivider(
+                  width: 3,
+                  color: Colors.white,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Spacer(),
+                      Text(
+                          style: TextStyle(color: Colors.white),
+                          "Order Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                      Spacer(),
+                      Text(
+                          style: TextStyle(color: Colors.white),
+                          "Order Status: Placed"),
+                      Spacer(),
+                      Text(
+                          style: TextStyle(color: Colors.white),
+                          "Order Number: 01228"),
+                      Spacer(),
+                      // Text(
+                      //     style: TextStyle(
+                      //         color: Colors.white),
+                      //     "Due Date: ${DateFormat.MMMMEEEEd().format(now)}"),
+                      // Spacer(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Color(0xFF685BFF),
+            // color: Colors.amber.shade300,
+          ),
+          height: height * 0.10,
+          width: width * .22,
+        ),
       ),
     );
   }

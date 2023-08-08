@@ -32,11 +32,11 @@ class MyUser {
   factory MyUser.fromMap(Map<String, dynamic> map) {
     return MyUser(
       uid: map['uid'] as String,
-      firstName: map['Name'] as String,
-      phoneNumber: map['Phone'] as String,
-      email: map['Email'] != null ? map['Email'] as String : null,
-      accountCreated: map['AccountCreated'] as Timestamp,
-      laundromatName: map['name'] as String,
+      firstName: map['userName'] as String,
+      phoneNumber: map['userPhone'] as String,
+      email: map['userEmail'] != null ? map['userEmail'] as String : null,
+      accountCreated: map['accountCreated'] as Timestamp,
+      laundromatName: map['laundromatName'] as String,
     );
   }
 

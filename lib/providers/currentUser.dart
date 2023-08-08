@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:store_responsive_dashboard/models/User.dart';
 import 'package:store_responsive_dashboard/providers/laundromat.dart';
 import 'package:store_responsive_dashboard/services/database.dart';
@@ -19,8 +20,10 @@ class CurrentUser extends ChangeNotifier {
     User _firebaseUser = _auth.currentUser!;
     final uid = _firebaseUser.uid;
 
-    final DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('laundryUsers')
+        .doc(uid)
+        .get();
 
     _currentUser = MyUser.fromMap(userDoc.data() as Map<String, dynamic>);
 
@@ -63,8 +66,13 @@ class CurrentUser extends ChangeNotifier {
     return retVal;
   }
 
-  Future<String> signUpWithEmailAndPassword(String email, String password,
-      String firstName, String phoneNumber, String laundromatName) async {
+  Future<String> signUpWithEmailAndPassword(
+      String email,
+      String password,
+      String firstName,
+      String phoneNumber,
+      String laundromatName,
+      BuildContext context) async {
     String retVal = "error";
     MyUser? _user;
 
@@ -83,13 +91,16 @@ class CurrentUser extends ChangeNotifier {
 
 // Create user in Firestore
       String _returnString = await MyDatabase().createUser(_user);
+      // .then((value) => Laundry().createLaundromat(_user));
       if (_returnString == "success") {
         retVal = "success";
       }
 
       if (_authResult.user != null) {
-        _currentUser!.uid = _authResult.user!.uid;
-        _currentUser!.email = _authResult.user!.email;
+        _currentUser = _user;
+        Provider.of<Laundry>(context, listen: false)
+            .createLaundromat1(context, _currentUser?.uid);
+        notifyListeners();
         retVal = "success";
       }
 
@@ -98,11 +109,12 @@ class CurrentUser extends ChangeNotifier {
       //   retVal = "success";
       // }
 
-      if (_authResult.user != null) {
-        _currentUser!.uid = _authResult.user!.uid;
-        _currentUser!.email = _authResult.user!.email;
-        retVal = "success";
-      }
+      // if (_authResult.user != null) {
+      //   _currentUser!.uid = _authResult.user!.uid;
+      //   _currentUser!.email = _authResult.user!.email;
+      //   retVal = "success";
+      //   notifyListeners();
+      // }
     } on PlatformException catch (e) {
       retVal = e.toString();
     } catch (e) {

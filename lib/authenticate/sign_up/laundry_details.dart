@@ -196,7 +196,8 @@ class _LaundryDetailsState extends State<LaundryDetails> {
                                                 password,
                                                 userName,
                                                 phoneNumber,
-                                                laundromatName);
+                                                laundromatName,
+                                                context);
 
                                         if (result == "success") {
                                           setState(() {

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:store_responsive_dashboard/authenticate/authenticate.dart';
 import 'package:store_responsive_dashboard/constants/default_button.dart';
 import 'package:store_responsive_dashboard/pages/example.dart';
+import 'package:store_responsive_dashboard/root.dart';
 import 'package:store_responsive_dashboard/widgets/responsive.dart';
 
 class VerifyEmailPage extends StatefulWidget {
@@ -120,7 +121,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Authenticate()),
+                                      builder: (context) => Root()),
                                   (route) => false);
                             },
                             text: "Cancel"),

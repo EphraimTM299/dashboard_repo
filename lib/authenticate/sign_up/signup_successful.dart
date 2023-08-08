@@ -3,6 +3,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:store_responsive_dashboard/constants/size_config.dart';
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
+import 'package:store_responsive_dashboard/providers/laundromat.dart';
 import 'package:store_responsive_dashboard/root.dart';
 
 class SignUpSuccess extends StatefulWidget {
@@ -15,7 +16,7 @@ class SignUpSuccess extends StatefulWidget {
 class _SignUpSuccessState extends State<SignUpSuccess> {
   @override
   void initState() {
-    Future.delayed(Duration(days: 1), () {
+    Future.delayed(Duration(seconds: 40), () {
       Navigator.pushAndRemoveUntil(
           context,
           PageTransition(child: Root(), type: PageTransitionType.fade),
@@ -71,14 +72,14 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                   height: 15,
                 ),
                 Text(
-                  "Welcome to teillo, We are pleased to have you Onboard",
+                  "Welcome to teillo, We are pleased to have you Onboard,\n We aim to complete setting up the laundromat in 3 working days, lookout for our call",
                   style: TextStyle(fontSize: width * 0.01),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 Text(
-                  "We have sent a verification email to ${Provider.of<CurrentUser>(context, listen: false).getCurrentUser?.email}.",
+                  "We have sent a verification email to ${Provider.of<Laundry>(context, listen: false).email}./\n Please verify your email address",
                   style: TextStyle(fontSize: width * 0.01),
                 )
               ],

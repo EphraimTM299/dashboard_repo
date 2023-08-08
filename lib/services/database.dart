@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:store_responsive_dashboard/models/Orders.dart';
 
 import 'package:store_responsive_dashboard/models/User.dart';
 
@@ -10,7 +9,7 @@ class MyDatabase {
     String retVal = "error";
 
     try {
-      await _firestore.collection("users").doc(user?.uid).set({
+      await _firestore.collection("laundryUsers").doc(user?.uid).set({
         "uid": user?.uid,
         "userName": user?.firstName,
         "userEmail": user?.email,
@@ -35,7 +34,7 @@ class MyDatabase {
   //       "Name": user?.firstName,
   //       "Email": user?.email,
   //       "Phone": user?.phoneNumber,
-  //       "Location": user?.address,
+  //       // "Location": user?.address,
   //       "name": user?.laundromatName,
   //       "AccountCreated": Timestamp.now(),
   //       "status": "Inactive",

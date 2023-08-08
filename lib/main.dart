@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:store_responsive_dashboard/authenticate/sign_up/more_details.dart';
 import 'package:store_responsive_dashboard/constants/theme.dart';
+import 'package:store_responsive_dashboard/pages/banking.dart';
 
 import 'package:store_responsive_dashboard/providers/currentUser.dart';
 import 'package:store_responsive_dashboard/providers/laundromat.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         title: 'Admin Dashboard',
         theme: theme(),
-        // home: MoreDetails(),
+        // home: BankAccount(),
         home: Root(),
         debugShowCheckedModeBanner: false,
       ),

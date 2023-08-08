@@ -35,24 +35,38 @@ class _MoreDetailsState extends State<MoreDetails> {
     super.initState();
   }
 
-  Future<GeoPoint> geoCodedResult(String laundryAddress) async {
-    Coordinates coordinates = await geoCode.forwardGeocoding(
-      address: address,
-    );
+  Future main() async {
+    GeoCode geoCode = GeoCode();
 
-    var latitude = coordinates.latitude;
-    var longitude = coordinates.longitude;
-    location = GeoPoint(latitude ?? 0.0, longitude ?? 0.0);
+    try {
+      Coordinates coordinates = await geoCode.forwardGeocoding(
+          address: FlutterGooglePlacesWeb.value['name'] ?? '');
 
-    laundryLocation = location ?? GeoPoint(0, 0);
-
-    return laundryLocation;
+      location =
+          GeoPoint(coordinates.latitude ?? 0, coordinates.longitude ?? 0);
+    } catch (e) {
+      print(e);
+    }
   }
+
+  // Future<GeoPoint> geoCodedResult(String laundryAddress) async {
+  //   Coordinates coordinates = await geoCode.forwardGeocoding(
+  //     address: address,
+  //   );
+
+  //   var latitude = coordinates.latitude;
+  //   var longitude = coordinates.longitude;
+  //   location = GeoPoint(latitude ?? 0.0, longitude ?? 0.0);
+
+  //   laundryLocation = location ?? GeoPoint(0, 0);
+
+  //   return laundryLocation;
+  // }
 
   String address = '';
   String laundromatName = '';
   GeoPoint? location;
-  GeoPoint laundryLocation = GeoPoint(0, 0);
+
   String status = 'Inactive';
   String role = '';
   String numberOfLocations = '';
@@ -213,8 +227,6 @@ class _MoreDetailsState extends State<MoreDetails> {
                                           const SizedBox(height: 15),
                                           buildLaundryTypeDropdown(),
                                           const SizedBox(height: 15),
-                                          buildLaundryNameFormField(),
-                                          const SizedBox(height: 15),
                                           FlutterGooglePlacesWeb(
                                             decoration: InputDecoration(
                                               labelText: "Address",
@@ -229,7 +241,6 @@ class _MoreDetailsState extends State<MoreDetails> {
                                           ),
                                           const SizedBox(height: 15),
                                           buildNumberOfLocations(),
-                                          const SizedBox(height: 15),
                                           const SizedBox(height: 15),
                                           buildTurnAroundTimeFormField(),
                                           FormError(errors: errors),
@@ -318,30 +329,52 @@ class _MoreDetailsState extends State<MoreDetails> {
                                                           .value['city'] ??
                                                       '';
 
-                                                  print(address);
-                                                  geoCodedResult(address);
-                                                  print(laundryLocation);
-                                                  print(location?.longitude);
+                                                  main();
+                                                });
+
+                                                // Provider.of<Laundry>(context,
+                                                //         listen: false)
+                                                //     .updateBusinessData(
+                                                //         address,
+                                                //         laundromatName,
+                                                //         city,
+                                                //         rating,
+                                                //         turnAround,
+                                                //         laundromatName,
+                                                //         location ??
+                                                //             GeoPoint(0, 0),
+                                                //         distance,
+                                                //         laundryT,
+                                                //         numberOfLocations);
+
+                                                // Delay and wait for coordinates
+                                                Future.delayed(
+                                                    Duration(seconds: 2), () {
+                                                  // Provider.of<Laundry>(context,
+                                                  //         listen: false)
+                                                  //     .createLaundromat(
+                                                  //         context);
                                                 });
 
                                                 // update the data
-                                                Provider.of<Laundry>(context,
-                                                        listen: false)
-                                                    .updateBusinessData(
-                                                        address,
-                                                        laundromatName,
-                                                        city,
-                                                        rating,
-                                                        turnAround,
-                                                        laundromatName,
-                                                        laundryLocation,
-                                                        distance,
-                                                        laundryT,
-                                                        numberOfLocations);
+                                                // Provider.of<Laundry>(context,
+                                                //         listen: false)
+                                                //     .updateBusinessData(
+                                                //         address,
+                                                //         laundromatName,
+                                                //         city,
+                                                //         rating,
+                                                //         turnAround,
+                                                //         laundromatName,
+                                                //         location ??
+                                                //             GeoPoint(0, 0),
+                                                //         distance,
+                                                //         laundryT,
+                                                //         numberOfLocations);
 
-                                                Provider.of<Laundry>(context,
-                                                        listen: false)
-                                                    .createLaundromat(context);
+                                                // Provider.of<Laundry>(context,
+                                                //         listen: false)
+                                                //     .createLaundromat(context);
 
                                                 // Navigator.push(
                                                 //     context,
@@ -510,42 +543,13 @@ class _MoreDetailsState extends State<MoreDetails> {
     );
   }
 
-  TextFormField buildLaundryNameFormField() {
-    return TextFormField(
-      onChanged: (value) {
-        setState(() {
-          laundromatName = value;
-        });
-
-        if (value.isNotEmpty) {
-          removeError(error: kBusinessNullError);
-        }
-        return;
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          addError(error: kBusinessNullError);
-          return "";
-        }
-        return null;
-      },
-      decoration: const InputDecoration(
-        labelText: "Business Name",
-        hintText: "e.g. WashasRus",
-        // If  you are using latest version of flutter then lable text and hint text shown like this
-        // if you r using flutter less then 1.20.* then maybe this is not working properly
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        // suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
-      ),
-    );
-  }
-
   TextFormField buildTurnAroundTimeFormField() {
     return TextFormField(
       keyboardType: TextInputType.number,
       onChanged: (value) {
         setState(() {
           turnAround = value;
+          main();
         });
 
         if (value.isNotEmpty) {

@@ -22,7 +22,7 @@ class MyChart extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData1,
         minX: 0,
-        maxX: 14,
+        maxX: 13,
         maxY: 6,
         minY: 0,
       );

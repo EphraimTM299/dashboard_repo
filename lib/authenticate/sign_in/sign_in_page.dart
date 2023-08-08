@@ -78,7 +78,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    print(width);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(),

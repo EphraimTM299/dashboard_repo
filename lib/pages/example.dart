@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:store_responsive_dashboard/pages/banking.dart';
 // ignore: unused_import
 import 'package:store_responsive_dashboard/pages/customers.dart';
 import 'package:store_responsive_dashboard/pages/orders.dart';
@@ -10,7 +11,7 @@ import 'package:store_responsive_dashboard/pages/statistics.dart';
 class MyHomepage extends StatelessWidget {
   MyHomepage({Key? key}) : super(key: key);
 
-  final _controller = SidebarXController(selectedIndex: 0, extended: false);
+  final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
 
   @override
@@ -133,7 +134,7 @@ class ExampleSidebarX extends StatelessWidget {
         ),
         SidebarXItem(
           icon: Icons.info_outline_rounded,
-          label: 'Statistics',
+          label: 'Bank Details',
         ),
         SidebarXItem(
           icon: Icons.settings,
@@ -169,7 +170,7 @@ class _ScreensExample extends StatelessWidget {
           case 1:
             return ServicesPage();
           case 2:
-            return Statistics();
+            return BankAccount();
           case 3:
             return Settings();
           default:
